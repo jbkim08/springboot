@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>인덱스</title>
+  </head>
+  <body>
+    <h1>인덱스 페이지</h1>
+    <form action="/create" method="post" th:object="${user}">
+      <p>이름: <input type="text" th:field="${user.name}" /></p>
+      <p>나이: <input type="text" th:field="${user.age}" /></p>
+      <p>재직중 : <input type="checkbox" th:field="${user.employed}" th:value="true" /></p>
+      <p>성별을 선택 :</p>
+      <p>남성: <input type="radio" th:field="${user.gender}" th:value="남성" /> 여성: <input type="radio" th:field="${user.gender}" th:value="여성" /></p>
+      <p>
+        <input type="submit" value="서브밋" />
+        <input type="reset" value="리셋" />
+      </p>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="layouts :: 헤드"> </head>
+  <body>
+    <nav th:replace="layouts :: 네브바"></nav>
+
+    <div class="container">
+      <h1>프로젝트 진행 상황</h1>
+      <!-- th:href, th:src 주소에 "@{/}"(jsp <=request.contextPath>) -->
+      <a class="btn btn-outline-success my-3" th:href="@{/projects/new}">프로젝트 추가</a>
+      <table class="table table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>프로젝트 이름</th>
+            <th>현재 진행상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 타임리프의 반복문 -->
+          <tr th:each="project : ${projectList}">
+            <td th:text="${project.name}"></td>
+            <td th:text="${project.stage}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <footer th:replace="layouts :: 푸터"></footer>
+  </body>
+</html>

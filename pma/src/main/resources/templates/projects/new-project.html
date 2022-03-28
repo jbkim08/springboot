@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="layouts :: 헤드"></head>
+  <body>
+    <nav th:replace="layouts :: 네브바"></nav>
+
+    <div class="container">
+      <form action="/projects/save" method="post" th:object="${project}">
+        <div class="row my-2">
+          <input class="form-control" th:field="*{name}" type="text" placeholder="프로젝트 이름" />
+        </div>
+        <div class="row my-2">
+          <select class="form-select" th:field="*{stage}">
+            <option th:value="시작전">시작전</option>
+            <option th:value="진행중">진행중</option>
+            <option th:value="완료">완료</option>
+          </select>
+        </div>
+        <div class="row my-2">
+          <textarea class="form-control" th:field="*{description}" placeholder="프로젝트 설명"></textarea>
+        </div>
+        <!-- 직원 선택 태그 추가 -->
+        <div class="row my-2">
+          <p>직원들을 선택</p>
+          <!-- 선택태그의 매핑은 employees -->
+          <select class="form-select" th:field="*{employees}" multiple>
+            <!-- 직원 전체를 옵션으로 출력 -->
+            <option th:each="employee : ${empList}" th:value="${employee.employeeId}" th:text="${employee.firstName}"></option>
+          </select>
+        </div>
+        <button class="btn btn-primary" type="submit">새 프로젝트</button>
+      </form>
+    </div>
+    <footer th:replace="layouts :: 푸터"></footer>
+  </body>
+</html>
