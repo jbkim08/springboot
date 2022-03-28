@@ -17,7 +17,7 @@ import javax.persistence.ManyToMany;
 public class Employee {
 	
 	@Id  //기본키를 명시
-	@GeneratedValue(strategy = GenerationType.AUTO) //자동생성 
+	@GeneratedValue(strategy = GenerationType.IDENTITY) //자동생성 
 	private Long employeeId;
 	
 	private String firstName;
@@ -25,8 +25,8 @@ public class Employee {
 	private String email;
 	
 	//다 : 다 관계에서는 테이블을 만들고 이테이블에 id를 넣고 다른 테이블의 아이디도 입력
-	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, 
-			CascadeType.REFRESH}, fetch = FetchType.LAZY)  
+	//CascadeType.REMOVE CascadeType.PERSIST 제거
+	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)  
 	@JoinTable(name = "project_employee", joinColumns = @JoinColumn(name="employee_id"),
 					inverseJoinColumns = @JoinColumn(name="project_id"))
 	private List<Project> projects;

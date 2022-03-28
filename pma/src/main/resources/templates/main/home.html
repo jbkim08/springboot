@@ -5,23 +5,29 @@
     <nav th:replace="layouts :: 네브바"></nav>
 
     <div class="container">
-      <h1>프로젝트 진행 상황</h1>
-
-      <table class="table table-hover">
-        <thead class="table-dark">
-          <tr>
-            <th>프로젝트 이름</th>
-            <th>현재 진행상태</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- 타임리프의 반복문 -->
-          <tr th:each="project : ${projectList}">
-            <td th:text="${project.name}"></td>
-            <td th:text="${project.stage}"></td>
-          </tr>
-        </tbody>
-      </table>
+      <h3>프로젝트 진행 상황</h3>
+      <div class="row">
+        <div class="col-md-7">
+          <table class="table table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th>프로젝트 이름</th>
+                <th>현재 진행상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 타임리프의 반복문 -->
+              <tr th:each="project : ${projectList}">
+                <td th:text="${project.name}"></td>
+                <td class="stage" th:text="${project.stage}"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-3 ms-5">
+          <canvas id="myChart"></canvas>
+        </div>
+      </div>
     </div>
     <div class="container">
       <h1>직원 현황</h1>
@@ -45,5 +51,8 @@
       </table>
     </div>
     <footer th:replace="layouts :: 푸터"></footer>
+    <!-- 홈페이지에만 필요한 챠트 만들기 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:src="@{/js/chart.js}"></script>
   </body>
 </html>

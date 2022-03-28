@@ -1,5 +1,6 @@
 package com.myapp.pma.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,15 +18,15 @@ public class Project {
 	
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long projectId;		//프로젝트 아이디 (CamelCase => DB project_id)
 	
 	private String name;		//프로젝트 이름
 	private String stage;		//프로젝트 상태 (시작전, 진행중, 완료)
 	private String description; //설명
 	
-	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, 
-			CascadeType.REFRESH}, fetch = FetchType.LAZY)  
+	// CascadeType.REMOVE CascadeType.PERSIST 제거
+	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)  
 	@JoinTable(name = "project_employee", joinColumns = @JoinColumn(name="project_id"),
 					inverseJoinColumns = @JoinColumn(name="employee_id"))
 	private List<Employee> employees;
@@ -76,6 +77,14 @@ public class Project {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	//프로젝트 객체에서 직원을 추가하는 메소드
+	public void addEmployee(Employee emp) { 
+		if(employees == null) {
+			employees = new ArrayList<>();
+		}
+		employees.add(emp);
 	}
 	
 }
