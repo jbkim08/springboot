@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.myapp.pma.dao.EmployeeRepository;
 import com.myapp.pma.entities.Employee;
+import com.myapp.pma.services.EmployeeService;
 
 @Controller
 @RequestMapping("/employees")
 public class EmployeeController {
 
 	@Autowired
-	private EmployeeRepository employeeRepository;
+	private EmployeeService employeeService;
 	
 	@GetMapping
 	public String diplayProjectList(Model model) {
-		List<Employee> empList = employeeRepository.findAll();
+		List<Employee> empList = employeeService.findAll();
 		model.addAttribute("empList", empList);
 		return "employees/list-employees";
 	}
@@ -35,7 +35,7 @@ public class EmployeeController {
 	
 	@PostMapping("/save")
 	public String createProject(Employee employee) {
-		employeeRepository.save(employee); //DB에 employee객체를 테이블에 저장
+		employeeService.save(employee); //DB에 employee객체를 테이블에 저장
 		return "redirect:/employees/new"; //post-redirect-get 패턴
 	}
 	
