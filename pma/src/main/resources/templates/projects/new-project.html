@@ -5,7 +5,7 @@
     <nav th:replace="layouts :: 네브바"></nav>
 
     <div class="container">
-      <form action="/projects/save" method="post" th:object="${project}">
+      <form th:action="@{/projects/save}" method="post" th:object="${project}">
         <div class="row my-2">
           <input class="form-control" th:field="*{name}" type="text" placeholder="프로젝트 이름" />
         </div>
