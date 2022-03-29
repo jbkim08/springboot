@@ -1,6 +1,5 @@
 package com.myapp.pma.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -27,8 +26,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Bean   //패스워드 암호화 객체
 	public PasswordEncoder getPasswordEncoder() {
 		return NoOpPasswordEncoder.getInstance(); //테스트용 암호화(x)
-	}	
-	
+	}		
 	// 허가
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {	
@@ -40,7 +38,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/employees").authenticated()       //인증된 유저
 			.antMatchers("/projects").authenticated()
 			.antMatchers("/").permitAll()				     //아무나
-			.and().formLogin();	
+			.and().formLogin()
+			.and().exceptionHandling().accessDeniedPage("/"); //예외 발생시 기본페이지로
 		//시큐리티에서는 기본적으로 csrf 방지가 적용중
 		//http.csrf().disable();												
 	}
