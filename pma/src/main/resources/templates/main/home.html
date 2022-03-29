@@ -30,25 +30,28 @@
       </div>
     </div>
     <div class="container">
-      <h1>직원 현황</h1>
-
-      <table class="table table-hover">
-        <thead class="table-dark">
-          <tr>
-            <th>성</th>
-            <th>이름</th>
-            <th>이메일</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- 타임리프의 반복문 -->
-          <tr th:each="emp : ${empList}">
-            <td th:text="${emp.lastName}"></td>
-            <td th:text="${emp.firstName}"></td>
-            <td th:text="${emp.email}"></td>
-          </tr>
-        </tbody>
-      </table>
+      <h3>직원 현황</h3>
+      <div class="row">
+        <div class="col-md-7">
+          <table class="table table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th>성</th>
+                <th>이름</th>
+                <th>프로젝트</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 타임리프의 반복문 -->
+              <tr th:each="emp : ${empProList}">
+                <td th:text="${emp.lastName}"></td>
+                <td th:text="${emp.firstName}"></td>
+                <td th:text="${emp.count}"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
     <footer th:replace="layouts :: 푸터"></footer>
     <!-- 홈페이지에만 필요한 챠트 만들기 -->

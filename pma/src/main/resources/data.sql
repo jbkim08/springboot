@@ -19,10 +19,10 @@ insert into project (project_id, name, stage, description) values (1003, '회사
 insert into project_employee (employee_id, project_id) values (1,1000);
 insert into project_employee (employee_id, project_id) values (1,1001);
 insert into project_employee (employee_id, project_id) values (1,1002);
-insert into project_employee (employee_id, project_id) values (1,1000);
+insert into project_employee (employee_id, project_id) values (1,1003);
 insert into project_employee (employee_id, project_id) values (3,1000);
-insert into project_employee (employee_id, project_id) values (1,1002);
-insert into project_employee (employee_id, project_id) values (6,1003);
+insert into project_employee (employee_id, project_id) values (5,1002);
+insert into project_employee (employee_id, project_id) values (6,1001);
 insert into project_employee (employee_id, project_id) values (6,1002);
 insert into project_employee (employee_id, project_id) values (6,1003);
 													
