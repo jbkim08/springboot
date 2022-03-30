@@ -13,6 +13,7 @@
             <th>성</th>
             <th>이름</th>
             <th>이메일</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -21,6 +22,14 @@
             <td th:text="${emp.lastName}"></td>
             <td th:text="${emp.firstName}"></td>
             <td th:text="${emp.email}"></td>
+            <td>
+              <!-- 타임리프 (id=1) => ?id=1 -->
+              <a th:href="@{/employees/update(id=${emp.employeeId})}" class="btn btn-outline-info btn-sm">수정</a>
+              <a th:href="@{/employees/delete(id=${emp.employeeId})}" class="btn btn-outline-danger btn-sm"
+              onclick="if((!confirm('정말로 삭제할까요?'))) return false">삭제</a>
+            </td>
+          </tr>              
+            </td>
           </tr>
         </tbody>
       </table>
