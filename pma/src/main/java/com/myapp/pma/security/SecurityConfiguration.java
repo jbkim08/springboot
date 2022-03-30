@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 //1.시큐리티 설정을 위해서 WebSecurityConfigurerAdapter 상속
 //2.어노테이션 EnableWebSecurity
@@ -35,7 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	// 4.허가
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {	
-		http.authorizeHttpRequests()
+		http.authorizeRequests()
 			.antMatchers("/projects/new").hasRole("ADMIN")   //관리자
 			.antMatchers("/projects/save").hasRole("ADMIN")
 			.antMatchers("/employees/new").hasRole("ADMIN") 
@@ -43,7 +44,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/employees").authenticated()       //인증된 유저
 			.antMatchers("/projects").authenticated()
 			.antMatchers("/","/**").permitAll()				     //아무나
-			.and().formLogin();
+			.and()
+			.formLogin(form -> form.loginPage("/login").permitAll())         //커스텀 로그인 페이지 추가
+			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")); //로그아웃 추가
 			 
 		//시큐리티에서는 기본적으로 csrf 방지가 적용중
 		//http.csrf().disable();												
