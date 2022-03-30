@@ -43,8 +43,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/employees").authenticated()       //인증된 유저
 			.antMatchers("/projects").authenticated()
 			.antMatchers("/","/**").permitAll()				     //아무나
-			.and().formLogin()
-			.and().exceptionHandling().accessDeniedPage("/"); //예외 발생시 기본페이지로
+			.and().formLogin();
+			 
 		//시큐리티에서는 기본적으로 csrf 방지가 적용중
 		//http.csrf().disable();												
 	}
