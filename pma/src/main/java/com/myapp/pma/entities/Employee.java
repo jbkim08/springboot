@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 
 @Entity
@@ -20,8 +22,15 @@ public class Employee {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) //자동생성 
 	private Long employeeId;
 	
+	@NotBlank(message = "이름을 입력해 주세요(널 또는 공백)")
+	@Size(min = 1, max = 20, message = "이름은 1자에서 20자까지 가능합니다.")
 	private String firstName;
+	
+	@NotBlank(message = "성을 입력해 주세요(널 또는 공백)")
+	@Size(min = 1, max = 2, message = "서은 1자에서 2자까지 가능합니다.")
 	private String lastName;
+	
+	@NotBlank(message = "이메일을 입력해 주세요")
 	private String email;
 	
 	//다 : 다 관계에서는 테이블을 만들고 이테이블에 id를 넣고 다른 테이블의 아이디도 입력

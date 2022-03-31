@@ -12,5 +12,7 @@ public interface ProjectRepository extends CrudRepository<Project, Long> {
 	//CrudRepository에 이미 CRUD 메소드가 다 만들어져 있음. => JPA 하이버네이트가 구현 코드도 다 자동생성
 	@Override
 	List<Project> findAll(); //기존의 findAll() 리턴타입이 Iterable<Project>이라서 수정
+
+	Project findByProjectId(long id);
 	
 }

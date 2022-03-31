@@ -2,12 +2,16 @@ package com.myapp.pma.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.myapp.pma.entities.Employee;
 import com.myapp.pma.entities.Project;
@@ -43,8 +47,37 @@ public class ProjectController {
 	}
 	
 	@PostMapping("/save")
-	public String createProject(Project project) {
-		projectService.save(project); //DB에 project객체를 테이블에 저장
-		return "redirect:/projects/new"; //post-redirect-get 패턴
+	public String createProject(@Valid Project project, Errors errors, Model model) {
+		// 유효성 체크 실패시 에러발생시 => 입력 페이지로 되돌림
+		if(errors.hasErrors()) {
+			List<Employee> empList = employeeService.findAll();
+			model.addAttribute("empList", empList);
+			return "projects/new-project";
+		}
+			
+		Long id = project.getProjectId();
+		
+		if(id != null) { //id가 있을 경우
+			projectService.update(project); // 업데이트
+		} else {
+			projectService.save(project); //DB에 employee객체를 새로 저장
+		}			
+		
+		return "redirect:/projects"; //post-redirect-get 패턴
+	}
+	
+	@GetMapping("/update")
+	public String displayProjectUpdateForm(@RequestParam("id") long id, Model model) {
+		Project project = projectService.findByProjectId(id);
+		model.addAttribute("project", project);
+		List<Employee> empList = employeeService.findAll();
+		model.addAttribute("empList", empList);
+		return "projects/new-project";
+	}
+	
+	@GetMapping("/delete")
+	public String deleteProject(@RequestParam("id") long id) {
+		projectService.deleteProject(id);
+		return "redirect:/projects";		
 	}
 }

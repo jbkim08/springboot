@@ -12,17 +12,24 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Project {
-	
-	
+		
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long projectId;		//프로젝트 아이디 (CamelCase => DB project_id)
 	
+	@NotBlank(message = "프로젝트 명을 입력해 주세요")
+	@Size(min = 3, max = 20, message = "제목은 3에서 20자까지 가능합니다.")
 	private String name;		//프로젝트 이름
+	
 	private String stage;		//프로젝트 상태 (시작전, 진행중, 완료)
+	
+	@NotBlank(message = "설명을 입력해 주세요(널 또는 공백)")
+	@Size(min = 5, message = "설명은 5자 이상 가능합니다.")
 	private String description; //설명
 	
 	// CascadeType.REMOVE CascadeType.PERSIST 제거

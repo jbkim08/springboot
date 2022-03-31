@@ -13,6 +13,7 @@
           <tr>
             <th>프로젝트 이름</th>
             <th>현재 진행상태</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -20,6 +21,11 @@
           <tr th:each="project : ${projectList}">
             <td th:text="${project.name}"></td>
             <td th:text="${project.stage}"></td>
+            <td>
+              <!-- 타임리프 (id=1) => ?id=1 -->
+              <a th:href="@{/projects/update(id=${project.projectId})}" class="btn btn-outline-info btn-sm">수정</a>
+              <a th:href="@{/projects/delete(id=${project.projectId})}" class="btn btn-outline-danger btn-sm" onclick="if(!confirm('정말로 삭제할까요?')) return false">삭제</a>
+            </td>
           </tr>
         </tbody>
       </table>

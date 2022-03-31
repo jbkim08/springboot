@@ -37,12 +37,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {	
 		http.authorizeRequests()
-			.antMatchers("/projects/new").hasRole("ADMIN")   //관리자
-			.antMatchers("/projects/save").hasRole("ADMIN")
-			.antMatchers("/employees/new").hasRole("ADMIN") 
-			.antMatchers("/employees/save").hasRole("ADMIN")
-			.antMatchers("/employees").authenticated()       //인증된 유저
-			.antMatchers("/projects").authenticated()
+			//.antMatchers("/projects/new").hasRole("ADMIN")   //관리자
+			//.antMatchers("/projects/save").hasRole("ADMIN")
+			//.antMatchers("/employees/new").hasRole("ADMIN") 
+			//.antMatchers("/employees/save").hasRole("ADMIN")
+			//.antMatchers("/employees").authenticated()       //인증된 유저
+			//.antMatchers("/projects").authenticated()
 			.antMatchers("/","/**").permitAll()				     //아무나
 			.and()
 			.formLogin(form -> form.loginPage("/login").permitAll())         //커스텀 로그인 페이지 추가
