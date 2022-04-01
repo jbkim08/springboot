@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>2.6.6</version>
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<!-- 프로젝트를 생성한는 고유의 아이디 결정 -->
 	<groupId>com.myapp</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>mobile</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<!-- 프로젝트 이름 -->
-	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
+	<name>mobile</name>
+	<description>rest api project</description>
 	<properties>
-		<!-- 자바 버전 -->
 		<java.version>11</java.version>
 	</properties>
-	<!-- 디펜던시 태그 안에는 프로젝트와 의존 관계에 있는 라이브러리들을 관리한다. -->
-	<!-- A라이브러리가 B를 사용하고 B라이브러리가 C를 사용하고 ... -->
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -43,8 +39,12 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 	</dependencies>
 
