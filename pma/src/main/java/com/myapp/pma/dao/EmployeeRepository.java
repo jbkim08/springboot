@@ -10,7 +10,6 @@ import com.myapp.pma.entities.Employee;
 
 public interface EmployeeRepository extends CrudRepository<Employee, Long> {
 	//자동으로 CRUD 객체 생성
-	@Override
 	List<Employee> findAll();
 	
 	//쿼리문을 실행하여 그 결과를 리스트로 리턴함(dto의 객체)

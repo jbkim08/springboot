@@ -48,7 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.formLogin(form -> form.loginPage("/login").permitAll())         //커스텀 로그인 페이지 추가
 			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")); //로그아웃 추가
 			 
-		//시큐리티에서는 기본적으로 csrf 방지가 적용중
-		//http.csrf().disable();												
+		//시큐리티에서는 기본적으로 csrf 방지가 적용중 rest-api에서는 끄기
+		http.csrf().disable();												
 	}
 }

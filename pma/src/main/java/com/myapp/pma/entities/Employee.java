@@ -14,6 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 public class Employee {
@@ -38,6 +40,7 @@ public class Employee {
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)  
 	@JoinTable(name = "project_employee", joinColumns = @JoinColumn(name="employee_id"),
 					inverseJoinColumns = @JoinColumn(name="project_id"))
+	@JsonIgnore
 	private List<Project> projects;
 	
 	// 빈 객체 생성	
