@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="/fragments/head :: head-admin"> </head>
+
+  <body>
+    <nav th:replace="/fragments/nav :: nav-admin"></nav>
+
+    <main role="main" class="container">
+      <div class="display-2">Pages</div>
+      <a th:href="@{/admin/pages/add}" class="btn btn-primary my-3">추가하기</a>
+
+      <div th:if="${!pages.empty}">
+        <table class="table" id="pages">
+          <tr class="home">
+            <th>제 목</th>
+            <th>슬러그</th>
+            <th>수 정</th>
+            <th>삭 제</th>
+          </tr>
+          <tr th:each="page : ${pages}">
+            <td th:text="${page.title}"></td>
+            <td th:text="${page.slug}"></td>
+            <td><a th:href="@{'/admin/pages/edit/' + ${page.id}}">수정</a></td>
+            <td><a th:href="@{'/admin/pages/delete/' + ${page.id}}">삭제</a></td>
+          </tr>
+        </table>
+      </div>
+      <div th:if="${pages.empty}">
+        <div class="display-4">현재 페이지가 없습니다.</div>
+      </div>
+    </main>
+
+    <footer th:replace="/fragments/footer :: footer"></footer>
+  </body>
+</html>

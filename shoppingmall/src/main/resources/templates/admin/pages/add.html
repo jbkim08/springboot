@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="/fragments/head :: head-admin"> </head>
+
+  <body>
+    <nav th:replace="/fragments/nav :: nav-admin"></nav>
+
+    <main role="main" class="container">
+      <div class="display-2">페이지 추가</div>
+      <a th:href="@{/admin/pages}" class="btn btn-primary my-3">돌아가기</a>
+
+      <form method="post" th:object="${page}" th:action="@{/admin/pages/add}">
+        <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">에러 발생</div>
+        <div class="form-group">
+          <label for="">제 목</label>
+          <input type="text" class="form-control" th:field="*{title}" placeholder="제목" />
+          <span class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+        </div>
+        <div class="form-group">
+          <label for="">슬러그</label>
+          <input type="text" class="form-control" th:field="*{slug}" placeholder="슬러그" />
+        </div>
+        <div class="form-group">
+          <label for="">내 용</label>
+          <textarea class="form-control" th:field="*{content}" cols="30" rows="10" placeholder="내 용"></textarea>
+          <span class="error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></span>
+        </div>
+        <button type="submit" class="btn btn-danger">추 가</button>
+      </form>
+    </main>
+
+    <footer th:replace="/fragments/footer :: footer"></footer>
+  </body>
+</html>
