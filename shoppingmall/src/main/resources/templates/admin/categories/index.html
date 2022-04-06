@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="/fragments/head :: head-admin"> </head>
+
+  <body>
+    <nav th:replace="/fragments/nav :: nav-admin"></nav>
+
+    <main role="main" class="container">
+      <div class="display-2">Categories</div>
+      <a th:href="@{/admin/categories/add}" class="btn btn-primary my-3">추가하기</a>
+      <div th:if="${message}" th:class="${'alert ' + alertClass}" th:text="${message}"></div>
+
+      <div th:if="${!categories.empty}">
+        <table class="table sorting" id="categories">
+          <tr class="home">
+            <th>제 목</th>
+            <th>수 정</th>
+            <th>삭 제</th>
+          </tr>
+          <tr th:each="category : ${categories}" th:id="'id_' + ${category.id}" th:class="${category.slug}">
+            <td th:text="${category.name}"></td>
+            <td><a th:href="@{'/admin/categories/edit/' + ${category.id}}">수정</a></td>
+            <td><a th:if="${category.slug != 'home'}" class="deleteConfirm" th:href="@{'/admin/categories/delete/' + ${category.id}}">삭제</a></td>
+          </tr>
+        </table>
+      </div>
+      <div th:if="${categories.empty}">
+        <div class="display-4">현재 페이지가 없습니다.</div>
+      </div>
+    </main>
+
+    <footer th:replace="/fragments/footer :: footer"></footer>
+    <script>
+      $('table#categories').sortable({
+        items: 'tr:not(.home)',
+        placeholder: 'ui-state-highlight',
+        update: function () {
+          //순서가 바뀔때 이벤트 발생
+          let ids = $('table#categories').sortable('serialize'); //id를 문자열로 순서대로 시리얼라이즈
+          //console.log(ids);
+          let url = '/admin/categories/reorder';
+
+          // $.post(url, ids, function (data) {
+          //   //AJAX post로 ids 전송하고 결과를 data로 받는다.
+          //   console.log(data); //콘솔확인
+          // });
+        },
+      });
+    </script>
+  </body>
+</html>
