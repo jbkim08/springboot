@@ -6,12 +6,14 @@
     <nav th:replace="/fragments/nav :: nav-admin"></nav>
 
     <main role="main" class="container">
-      <div class="display-2">페이지 추가</div>
+      <div class="display-2">페이지 수정</div>
       <a th:href="@{/admin/pages}" class="btn btn-primary my-3">돌아가기</a>
 
-      <form method="post" th:object="${page}" th:action="@{/admin/pages/add}">
+      <form method="post" th:object="${page}" th:action="@{/admin/pages/edit}">
         <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">에러 발생</div>
         <div th:if="${message}" th:class="${'alert ' + alertClass}" th:text="${message}"></div>
+        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{sorting}" />
 
         <div class="form-group">
           <label for="">제 목</label>
@@ -27,7 +29,7 @@
           <textarea class="form-control" th:field="*{content}" cols="30" rows="10" placeholder="내 용"></textarea>
           <span class="error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></span>
         </div>
-        <button type="submit" class="btn btn-danger">추 가</button>
+        <button type="submit" class="btn btn-danger">수 정</button>
       </form>
     </main>
 
