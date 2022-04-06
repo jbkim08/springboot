@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.myapp.shoppingmall.dao.PageRepository;
@@ -27,7 +29,7 @@ public class AdminPageController {
 
 	@GetMapping
 	public String index(Model model) {
-		List<Page> pages = pageRepo.findAll();
+		List<Page> pages = pageRepo.findAllByOrderBySortingAsc();
 		model.addAttribute("pages", pages);
 		return "admin/pages/index";
 	}
@@ -97,5 +99,39 @@ public class AdminPageController {
 
 		return "redirect:/admin/pages/edit/" + page.getId(); // post-redirect-get
 	}
+	
+	@GetMapping("/delete/{id}")
+	public String delete(@PathVariable int id, RedirectAttributes redirectAttributes) {
+		
+		pageRepo.deleteById(id);     // id로 삭제하는 메서드
+		
+		redirectAttributes.addFlashAttribute("message", "성공적으로 삭제 되었습니다.");
+		redirectAttributes.addFlashAttribute("alertClass", "alert-success");		
+		
+		return "redirect:/admin/pages"; //인덱스 페이지로 되돌아감
+	}
+	
+	@PostMapping("/reorder")
+	public @ResponseBody String reorder(@RequestParam("id[]") int[] id) {
+		
+		int count = 1;
+		Page page;
+		
+		for(int pageId : id) {
+			page = pageRepo.getById(pageId); //DB에서 id로 page 객체 검색
+			page.setSorting(count);
+			pageRepo.save(page); //sorting값을 넣고 저장한다.
+			count++;
+		}
+		
+		return "ok"; //뷰페이지가 아니고 ok문자열로 리턴됨
+	}
 
 }
+
+
+
+
+
+
+

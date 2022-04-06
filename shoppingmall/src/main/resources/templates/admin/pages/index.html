@@ -8,20 +8,21 @@
     <main role="main" class="container">
       <div class="display-2">Pages</div>
       <a th:href="@{/admin/pages/add}" class="btn btn-primary my-3">추가하기</a>
+      <div th:if="${message}" th:class="${'alert ' + alertClass}" th:text="${message}"></div>
 
       <div th:if="${!pages.empty}">
-        <table class="table" id="pages">
+        <table class="table sorting" id="pages">
           <tr class="home">
             <th>제 목</th>
             <th>슬러그</th>
             <th>수 정</th>
             <th>삭 제</th>
           </tr>
-          <tr th:each="page : ${pages}">
+          <tr th:each="page : ${pages}" th:id="'id_' + ${page.id}" th:class="${page.slug}">
             <td th:text="${page.title}"></td>
             <td th:text="${page.slug}"></td>
             <td><a th:href="@{'/admin/pages/edit/' + ${page.id}}">수정</a></td>
-            <td><a th:href="@{'/admin/pages/delete/' + ${page.id}}">삭제</a></td>
+            <td><a th:if="${page.slug != 'home'}" class="deleteConfirm" th:href="@{'/admin/pages/delete/' + ${page.id}}">삭제</a></td>
           </tr>
         </table>
       </div>
@@ -31,5 +32,22 @@
     </main>
 
     <footer th:replace="/fragments/footer :: footer"></footer>
+    <script>
+      $('table#pages').sortable({
+        items: 'tr:not(.home)',
+        placeholder: 'ui-state-highlight',
+        update: function () {
+          //순서가 바뀔때 이벤트 발생
+          let ids = $('table#pages').sortable('serialize'); //id를 문자열로 순서대로 시리얼라이즈
+          //console.log(ids);
+          let url = '/admin/pages/reorder';
+
+          $.post(url, ids, function (data) {
+            //AJAX post로 ids 전송하고 결과를 data로 받는다.
+            console.log(data); //콘솔확인
+          });
+        },
+      });
+    </script>
   </body>
 </html>
