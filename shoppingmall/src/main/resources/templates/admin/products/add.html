@@ -26,7 +26,10 @@
         </div>
 
         <div class="form-group">
-          <input type="file" name="file" />
+          <label for="">이미지</label>
+          <input type="file" class="form-control" th:id="file" th:name="file" />
+          <!-- 미리 올릴 이미지를 표시 -->
+          <img src="#" id="imgPreview" />
         </div>
 
         <div class="form-group">
@@ -49,5 +52,28 @@
     </main>
 
     <footer th:replace="/fragments/footer :: footer"></footer>
+    <script>
+      $(function () {
+        $('#imgPreview').hide(); //처음에 숨김
+        $('#file').change(function () {
+          //파일이 바뀔때(새로 올림 또는 교체)=> 이벤트
+          readURL(this); // readURL 함수 실행
+        });
+      });
+
+      function readURL(input) {
+        // 파일(이미지) 있을 경우에 실행
+        if (input.files && input.files[0]) {
+          let reader = new FileReader(); // 파일리더 객체 생성
+
+          reader.readAsDataURL(input.files[0]); // 파일리더로 첫번째 파일 경로 읽기
+
+          // 파일리더가 주소를 다 읽으면 onload 이벤트 발생하고 이때 화면에 사진을 표시한다.
+          reader.onload = function (e) {
+            $('#imgPreview').attr('src', e.target.result).width(200).show();
+          };
+        }
+      }
+    </script>
   </body>
 </html>

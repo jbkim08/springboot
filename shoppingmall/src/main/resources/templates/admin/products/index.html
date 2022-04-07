@@ -22,9 +22,11 @@
           </tr>
           <tr th:each="product : ${products}">
             <td th:text="${product.name}"></td>
-            <td th:text="${product.image}"></td>
-            <td th:text="${product.categoryId}"></td>
-            <td th:text="${product.price}"></td>
+            <td>
+              <img th:src="@{'/media/'+${product.image}}" style="height: 2em" />
+            </td>
+            <td th:text="${cateIdAndName[__${product.categoryId}__]}"></td>
+            <td th:text="${product.price}+' 원'"></td>
             <td><a th:href="@{'/admin/products/edit/' + ${product.id}}">수정</a></td>
             <td><a class="deleteConfirm" th:href="@{'/admin/products/delete/' + ${product.id}}">삭제</a></td>
           </tr>

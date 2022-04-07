@@ -6,4 +6,6 @@ import com.myapp.shoppingmall.entities.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
+	Product findByName(String name);
+
 }
