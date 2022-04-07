@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
@@ -109,6 +110,93 @@ public class AdminProductController {
 		}
 		
 		return "redirect:/admin/products/add";
+	}
+	
+	@GetMapping("/edit/{id}")
+	public String edit(@PathVariable int id, Model model) {
+		
+		Product product = productRepo.getById(id);
+		List<Category> categories = categoryRepo.findAll();
+		
+		model.addAttribute("categories", categories);
+		model.addAttribute("product", product);
+		return "admin/products/edit";
+	}	
+	
+	@PostMapping("/edit")
+	public String edit(@Valid Product product, BindingResult bindingResult, 
+				MultipartFile file, RedirectAttributes attr, Model model) throws IOException {
+		// 미리 id로 수정전의 제품을 불러옴
+		Product currentProduct = productRepo.getById(product.getId());
+		
+		if (bindingResult.hasErrors()) {
+			List<Category> categories = categoryRepo.findAll();
+			model.addAttribute("categories", categories);
+			return "admin/products/edit"; // 유효성 검사 에러시 다시 되돌아감
+		}
+
+		boolean fileOk = false;
+		byte[] bytes = file.getBytes(); // 업로드된 이미지 파일의 데이터
+		String fileName = file.getOriginalFilename(); // 파일의 이름
+		Path path = Paths.get("src/main/resources/static/media/" + fileName); // 파일을 저장할 위치와 이름까지
+
+		if(!file.isEmpty()) { // 새 이미지 파일이 있으면
+			if (fileName.endsWith("jpg") || fileName.endsWith("png")) {
+				fileOk = true; // 확장자가 .jpg , .png 만 OK.
+			}
+		} else { // 이미지는 수정 안함
+			fileOk = true; // 기존 이미지 사용
+		}
+		
+		// 성공적으로 수정됨 메세지
+		attr.addFlashAttribute("message", "상품이 성공적으로 수정됨!");
+		attr.addFlashAttribute("alertClass", "alert-success");
+		// 슬러그 만들기
+		String slug = product.getName().toLowerCase().replace(" ", "-");
+		// 똑같은 상품명이 있는지 검사
+		Product productExists = productRepo.findByNameAndIdNot(product.getName(), product.getId());
+
+		if(!fileOk) { //파일 업로드가 안됬거나 확장자가 png,jpg 가 아님
+			attr.addFlashAttribute("message", "이미지는 jpg나 png를 사용해 주세요");
+			attr.addFlashAttribute("alertClass", "alert-danger");
+			attr.addFlashAttribute("product", product);
+		} 
+		else if (productExists != null) { //이미 상품명이 DB에 존재함
+			attr.addFlashAttribute("message", "상품이 이미 있습니다. 다른 이름으로 등록해 주세요");
+			attr.addFlashAttribute("alertClass", "alert-danger");
+			attr.addFlashAttribute("product", product);
+		}
+		else { //상품과 이미지 파일을 저장한다.
+			product.setSlug(slug);
+			
+			if(!file.isEmpty()) {
+				Path currentpath = Paths.get("src/main/resources/static/media/" + currentProduct.getImage());
+				Files.delete(currentpath); // 새파일 있기 때문에 기존 파일을 삭제
+				product.setImage(fileName);
+				Files.write(path, bytes); // 새 파일을 저장
+			} else {
+				product.setImage(currentProduct.getImage());
+			}
+			
+			productRepo.save(product);
+		}
+		
+		return "redirect:/admin/products/edit/" + product.getId();
+	}
+	
+	@GetMapping("/delete/{id}")
+	public String delete(@PathVariable int id, RedirectAttributes redirectAttributes) throws IOException {
+		// id로 상품을 삭제하기 전에 먼저 id로 제품객체를 불러와서 이미지 파일을 삭제한후 제품 삭제	
+		Product currentProduct = productRepo.getById(id) ;
+		Path currentPath = Paths.get("src/main/resources/static/media/" + currentProduct.getImage());
+		
+		Files.delete(currentPath); //파일 먼저 삭제
+		productRepo.deleteById(id); //제품 삭제
+		
+		redirectAttributes.addFlashAttribute("message", "성공적으로 삭제 되었습니다.");
+		redirectAttributes.addFlashAttribute("alertClass", "alert-success");		
+		
+		return "redirect:/admin/products";
 	}
 
 }
