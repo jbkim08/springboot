@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.myapp.shoppingmall.dao.CategoryRepository;
 import com.myapp.shoppingmall.entities.Category;
-import com.myapp.shoppingmall.entities.Page;
 
 @Controller
 @RequestMapping("/admin/categories")
@@ -28,7 +29,7 @@ public class AdminCategoryController {
 	
 	@GetMapping
 	public String index(Model model) {
-		List<Category> categories = categoryRepo.findAll();
+		List<Category> categories = categoryRepo.findAllByOrderBySortingAsc();
 		model.addAttribute("categories", categories);
 		return "admin/categories/index"; 
 	}
@@ -108,5 +109,21 @@ public class AdminCategoryController {
 		redirectAttributes.addFlashAttribute("alertClass", "alert-success");		
 		
 		return "redirect:/admin/categories"; //인덱스 페이지로 되돌아감
+	}
+	
+	@PostMapping("/reorder")
+	public @ResponseBody String reorder(@RequestParam("id[]") int[] id) {
+		
+		int count = 1;
+		Category category;
+		
+		for(int categoryId : id) {
+			category = categoryRepo.getById(categoryId); //DB에서 id로 category 객체 검색
+			category.setSorting(count);
+			categoryRepo.save(category); //sorting값을 넣고 저장한다.
+			count++;
+		}
+		
+		return "ok"; //뷰페이지가 아니고 ok문자열로 리턴됨
 	}
 }

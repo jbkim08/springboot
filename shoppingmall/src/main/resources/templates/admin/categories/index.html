@@ -20,7 +20,7 @@
           <tr th:each="category : ${categories}" th:id="'id_' + ${category.id}" th:class="${category.slug}">
             <td th:text="${category.name}"></td>
             <td><a th:href="@{'/admin/categories/edit/' + ${category.id}}">수정</a></td>
-            <td><a th:if="${category.slug != 'home'}" class="deleteConfirm" th:href="@{'/admin/categories/delete/' + ${category.id}}">삭제</a></td>
+            <td><a class="deleteConfirm" th:href="@{'/admin/categories/delete/' + ${category.id}}">삭제</a></td>
           </tr>
         </table>
       </div>
@@ -40,10 +40,10 @@
           //console.log(ids);
           let url = '/admin/categories/reorder';
 
-          // $.post(url, ids, function (data) {
-          //   //AJAX post로 ids 전송하고 결과를 data로 받는다.
-          //   console.log(data); //콘솔확인
-          // });
+          $.post(url, ids, function (data) {
+            //AJAX post로 ids 전송하고 결과를 data로 받는다.
+            console.log(data); //콘솔확인
+          });
         },
       });
     </script>

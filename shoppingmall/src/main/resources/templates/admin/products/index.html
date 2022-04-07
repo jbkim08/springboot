@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="/fragments/head :: head-admin"> </head>
+
+  <body>
+    <nav th:replace="/fragments/nav :: nav-admin"></nav>
+
+    <main role="main" class="container">
+      <div class="display-2">Products</div>
+      <a th:href="@{/admin/products/add}" class="btn btn-primary my-3">추가하기</a>
+      <div th:if="${message}" th:class="${'alert ' + alertClass}" th:text="${message}"></div>
+
+      <div th:if="${!products.empty}">
+        <table class="table" id="products">
+          <tr>
+            <th>상품명</th>
+            <th>이미지</th>
+            <th>카테고리</th>
+            <th>가 격</th>
+            <th>수 정</th>
+            <th>삭 제</th>
+          </tr>
+          <tr th:each="product : ${products}">
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.image}"></td>
+            <td th:text="${product.categoryId}"></td>
+            <td th:text="${product.price}"></td>
+            <td><a th:href="@{'/admin/products/edit/' + ${product.id}}">수정</a></td>
+            <td><a class="deleteConfirm" th:href="@{'/admin/products/delete/' + ${product.id}}">삭제</a></td>
+          </tr>
+        </table>
+      </div>
+      <div th:if="${products.empty}">
+        <div class="display-4">현재 상품이 없습니다.</div>
+      </div>
+    </main>
+
+    <footer th:replace="/fragments/footer :: footer"></footer>
+  </body>
+</html>

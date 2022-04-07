@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="/fragments/head :: head-admin"> </head>
+
+  <body>
+    <nav th:replace="/fragments/nav :: nav-admin"></nav>
+
+    <main role="main" class="container">
+      <div class="display-2">상품 추가</div>
+      <a th:href="@{/admin/products}" class="btn btn-primary my-3">돌아가기</a>
+
+      <form method="post" enctype="multipart/form-data" th:object="${product}" th:action="@{/admin/products/add}">
+        <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">에러 발생</div>
+        <div th:if="${message}" th:class="${'alert ' + alertClass}" th:text="${message}"></div>
+
+        <div class="form-group">
+          <label for="">이 름</label>
+          <input type="text" class="form-control" th:field="*{name}" placeholder="이름" />
+          <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="">제품설명</label>
+          <input type="text" class="form-control" th:field="*{description}" placeholder="제품설명" />
+          <span class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+        </div>
+
+        <div class="form-group">
+          <input type="file" name="file" />
+        </div>
+
+        <div class="form-group">
+          <label for="">가 격</label>
+          <input type="text" class="form-control" th:field="*{price}" placeholder="가격(원)" />
+          <span class="error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="">카테고리</label>
+          <select th:field="*{categoryId}" class="form-control">
+            <option value="0">카테고리 선택</option>
+            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+          </select>
+          <span class="error" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></span>
+        </div>
+
+        <button type="submit" class="btn btn-danger">추 가</button>
+      </form>
+    </main>
+
+    <footer th:replace="/fragments/footer :: footer"></footer>
+  </body>
+</html>
