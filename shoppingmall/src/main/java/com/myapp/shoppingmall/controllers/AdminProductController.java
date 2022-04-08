@@ -10,6 +10,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -37,9 +41,12 @@ public class AdminProductController {
 	private CategoryRepository categoryRepo;
 
 	@GetMapping
-	public String index(Model model) {
+	public String index(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
 
-		List<Product> products = productRepo.findAll();
+		int perPage = 6; //한 페이지에 6개 출력 (최대 6개)
+		Pageable pageable = PageRequest.of(page, perPage); // 표시할페이지, 한페이지에 몇개(6)
+		//.data.domain.Page 
+		Page<Product> products = productRepo.findAll(pageable);
 		List<Category> categories = categoryRepo.findAll();
 		
 		HashMap<Integer, String> cateIdAndName = new HashMap<>();
@@ -50,7 +57,16 @@ public class AdminProductController {
 
 		model.addAttribute("products", products);
 		model.addAttribute("cateIdAndName", cateIdAndName);
-
+		
+		// 페이지를 보여주기 위해 계산
+		long count = productRepo.count(); //전체 갯수(long타입 리턴)
+		double pageCount = Math.ceil( (double)count / (double)perPage ); // 13 / 6 = 2.12 (총페이지숫자)
+		
+		model.addAttribute("pageCount", (int)pageCount); //총페이지
+		model.addAttribute("perPage", perPage);			//페이지당 표시 아이템수
+		model.addAttribute("count", count);				//총 아이템 갯수
+		model.addAttribute("page", page);				//현재 페이지
+		
 		return "admin/products/index";
 	}
 
@@ -132,6 +148,7 @@ public class AdminProductController {
 		if (bindingResult.hasErrors()) {
 			List<Category> categories = categoryRepo.findAll();
 			model.addAttribute("categories", categories);
+			if(product.getImage() == null) product.setImage(currentProduct.getImage());
 			return "admin/products/edit"; // 유효성 검사 에러시 다시 되돌아감
 		}
 

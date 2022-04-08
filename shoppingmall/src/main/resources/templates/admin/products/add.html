@@ -21,7 +21,7 @@
 
         <div class="form-group">
           <label for="">제품설명</label>
-          <input type="text" class="form-control" th:field="*{description}" placeholder="제품설명" />
+          <textarea class="form-control" th:field="*{description}" cols="30" rows="10" placeholder="제품설명"></textarea>
           <span class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
         </div>
 
