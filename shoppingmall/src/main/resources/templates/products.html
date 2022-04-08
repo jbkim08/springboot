@@ -23,6 +23,21 @@
               <p th:text="${product.price} + '원'"></p>
             </div>
           </div>
+          <!-- 부트스트랩 페이지네이션 -->
+          <nav class="mt-3" th:if="${count > perPage}">
+            <ul class="pagination">
+              <li class="page-item" th:if="${page > 0}">
+                <!-- ${#httpServletRequest.requestURI} 는 현재 페이지 주소  -->
+                <a th:href="@{${#httpServletRequest.requestURI}} + '?page=__${page-1}__'" class="page-link">이전</a>
+              </li>
+              <li class="page-item" th:classappend="${page==number} ? 'active' : ''" th:each="number : ${#numbers.sequence(0, pageCount-1)}">
+                <a th:href="@{${#httpServletRequest.requestURI}} + '?page=__${number}__'" class="page-link" th:text="${number+1}"></a>
+              </li>
+              <li class="page-item" th:if="${page < pageCount-1}">
+                <a th:href="@{${#httpServletRequest.requestURI}} + '?page=__${page+1}__'" class="page-link">다음</a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </main>
