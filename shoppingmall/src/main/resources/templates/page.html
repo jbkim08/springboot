@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="/fragments/head :: head-front"> </head>
+
+  <body>
+    <nav th:replace="/fragments/nav :: nav-front"></nav>
+
+    <main role="main" class="container-fluid mt-5">
+      <div class="row">
+        <div th:replace="/fragments/categories :: categories"></div>
+        <div class="col"></div>
+        <div class="col-7" th:utext="${page.content}"></div>
+        <div class="col"></div>
+      </div>
+    </main>
+
+    <footer th:replace="/fragments/footer :: footer"></footer>
+  </body>
+</html>

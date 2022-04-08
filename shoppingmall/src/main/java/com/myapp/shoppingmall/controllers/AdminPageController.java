@@ -92,7 +92,6 @@ public class AdminPageController {
 			attr.addFlashAttribute("page", page); 
 		} else {
 			page.setSlug(slug); // 소문자 - 수정된 슬러그를 업데이트
-			page.setSorting(100); // 기본 솔팅값
 
 			pageRepo.save(page);
 		}
