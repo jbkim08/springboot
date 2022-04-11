@@ -21,6 +21,13 @@
               <h4 th:text="${product.name}"></h4>
               <div class="desc" th:utext="${product.description}"></div>
               <p th:text="${product.price} + '원'"></p>
+
+              <div style="position: relative">
+                <p>
+                  <a class="btn btn-primary addToCart" th:attr="data-id=${product.id}" th:href="@{'/cart/add/' + ${product.id}}">장바구니 추가</a>
+                </p>
+                <div class="btn btn-sm btn-success hide productAdded">추가됨!</div>
+              </div>
             </div>
           </div>
           <!-- 부트스트랩 페이지네이션 -->
