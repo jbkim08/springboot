@@ -50,5 +50,27 @@
     </main>
 
     <footer th:replace="/fragments/footer :: footer"></footer>
+    <script>
+      //추가하기 버튼을 눌렀을때 이벤트
+      $('a.addToCart').click(function (e) {
+        e.preventDefault(); //원래 a태그의 기능인 주소이동을 멈춤
+        //alert('장바구니 누룸');
+        let $this = $(this); //제이쿼리 변수 $변수명 클릭한 장바구니 버튼
+
+        let id = $this.attr('data-id'); //제품 id값
+        let url = '/cart/add/' + id;
+
+        //AJAX GET 주소는 url, 보내는 데이터{}없음, 결과 데이터 data
+        $.get(url, {}, function (data) {
+          //console.log(data);
+          $('div.cart').html(data); //장바구니 화면을 덮어쓰기
+        }).done(function () {
+          $this.parent().parent().find('div.productAdded').fadeIn(); // 보여짐(특수효과)
+          setTimeout(function () {
+            $this.parent().parent().find('div.productAdded').fadeOut(); //사라짐
+          }, 1000);
+        });
+      });
+    </script>
   </body>
 </html>

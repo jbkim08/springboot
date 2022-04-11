@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="/fragments/head :: head-front"> </head>
+
+  <body>
+    <nav th:replace="/fragments/nav :: nav-front"></nav>
+
+    <main role="main" class="container-fluid mt-5">
+      <div class="row">
+        <div th:replace="/fragments/categories :: categories"></div>
+        <div class="col"></div>
+        <div class="col-7">
+          <h2 class="display-4">장바구니</h2>
+          <table class="table">
+            <tr>
+              <th>상품</th>
+              <th>이미지</th>
+              <th>수량</th>
+              <th>가격</th>
+              <th>합계</th>
+            </tr>
+            <tr th:each="item : ${cart}">
+              <td th:text="${item.value.name}"></td>
+              <td>
+                <img th:src="@{'/media/'+${item.value.image}}" style="height: 2em" />
+              </td>
+              <td>
+                <span th:text="${item.value.quantity}"></span>
+                <a th:href="@{'/cart/add/'+${item.value.id}}+'?cartPage=true'" class="btn btn-success btn-sm">+</a>
+                <a th:href="@{'/cart/subtract/'+${item.value.id}}" class="btn btn-primary btn-sm">-</a>
+                <a th:href="@{'/cart/remove/'+${item.value.id}}" class="btn btn-danger btn-sm">삭제</a>
+              </td>
+              <td th:text="${item.value.price} + ' 원'"></td>
+              <td th:with="totalPrice = ${item.value.price}*${item.value.quantity}" th:text="${totalPrice} + ' 원'"></td>
+            </tr>
+            <tr>
+              <th colspan="5" class="text-right pr-5" th:text="'총 합계 : ' + ${ctotal} + ' 원'"></th>
+            </tr>
+            <tr>
+              <td>
+                <a href="/cart/clear" class="btn btn-danger">비우기</a>
+              </td>
+              <td colspan="4" class="text-right">
+                <a href="#" class="btn btn-success checkout">체크아웃</a>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="col"></div>
+      </div>
+    </main>
+
+    <footer th:replace="/fragments/footer :: footer"></footer>
+  </body>
+</html>

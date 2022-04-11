@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.myapp.shoppingmall.dao.Cart;
 import com.myapp.shoppingmall.dao.ProductRepository;
@@ -17,6 +18,7 @@ import com.myapp.shoppingmall.entities.Product;
 
 @Controller
 @RequestMapping("/cart")
+@SuppressWarnings("unchecked")
 public class CartController {
 
 	@Autowired
@@ -30,8 +32,8 @@ public class CartController {
 	 * @return
 	 */
 	@GetMapping("/add/{id}")
-	@SuppressWarnings("unchecked")
-	public String add(@PathVariable int id, HttpSession session, Model model) {
+	public String add(@PathVariable int id, HttpSession session, Model model,
+						@RequestParam(required = false) String cartPage) {
 		// 0. 제품을 DB에서 꺼내기
 		Product product = productRepo.getById(id);
 		
@@ -62,7 +64,34 @@ public class CartController {
 		}
 		model.addAttribute("size", size);   //화면에 전달
 		model.addAttribute("total", total); //화면에 전달
+		
+		if(cartPage != null) {  //cart.html 페이지에서 (+)버튼을 눌렀을때는 다시 카트페이지로 돌아감
+			return "redirect:/cart/view";
+		}
 				
-		return "cart_view";
+		return "cart_view"; //cart_view.html에 size total을 넣어서 
+	}
+	
+	@GetMapping("/view")
+	public String view(HttpSession session, Model model) {
+		
+		if(session.getAttribute("cart") == null) {
+			return "redirect:/"; //장바구니가 없을경우 홈페이지 이동
+		}
+		
+		HashMap<Integer, Cart> cart = (HashMap<Integer, Cart>) session.getAttribute("cart");
+		 
+		model.addAttribute("cart", cart);
+		model.addAttribute("noCartView", true); //왼쪽 카트뷰 표시는 필요없음
+			
+		return "cart";
 	}
 }
+
+
+
+
+
+
+
+

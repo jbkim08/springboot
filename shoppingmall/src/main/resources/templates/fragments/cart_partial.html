@@ -1,4 +1,4 @@
-<div class="bg-dark text-white p-3 mt-3" th:fragment="cart_partial">
+<div class="bg-dark text-white p-3 mt-3" th:if="${noCartView == null}" th:fragment="cart_partial">
   <div class="cart cartActive" th:if="${cartActive}">
     <p>장바구니에 <span th:text="${csize}"></span> 개 상품이 있습니다.</p>
     <p>총 가격은 <span th:text="${ctotal}"></span> 원 입니다.</p>
