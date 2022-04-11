@@ -2,6 +2,7 @@ package com.myapp.shoppingmall.controllers;
 
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +87,65 @@ public class CartController {
 			
 		return "cart";
 	}
+	
+	@GetMapping("/subtract/{id}") // - 버튼을 눌렀을때
+	public String subtract(@PathVariable int id, HttpSession session, Model model, HttpServletRequest httpServletRequest) {
+		// 세션에서 카트 불러오기
+		HashMap<Integer, Cart> cart = (HashMap<Integer, Cart>) session.getAttribute("cart");
+		// 현재 제품의 갯수를 가져오기
+		int qty = cart.get(id).getQuantity();
+		
+		if(qty == 1) { //제품이 1개있는데 -- => 없어짐
+			cart.remove(id); // key값으로 삭제
+			if(cart.size() == 0) { // 카트가 하나도 없을경우 
+				session.removeAttribute("cart"); //세션에서 삭제
+			}
+		} else {
+			cart.get(id).setQuantity(--qty);	//수량만 --		
+		}
+		
+		String refererLink = httpServletRequest.getHeader("Referer"); //요청된 이전주소의 정보가 들어있음
+		
+		return "redirect:" + refererLink; //다시 이전 페이지로 이동
+	}
+	
+	@GetMapping("/remove/{id}") // 삭제 버튼을 눌렀을때
+	public String remove(@PathVariable int id, HttpSession session, Model model, HttpServletRequest httpServletRequest) {
+		// 세션에서 카트 불러오기
+		HashMap<Integer, Cart> cart = (HashMap<Integer, Cart>) session.getAttribute("cart");
+		
+		cart.remove(id); //id로 삭제
+		
+		if(cart.size() == 0) { // 카트가 하나도 없을경우 
+			session.removeAttribute("cart"); //세션에서 삭제
+		}
+	
+		String refererLink = httpServletRequest.getHeader("Referer"); //요청된 이전주소의 정보가 들어있음
+		
+		return "redirect:" + refererLink; //다시 이전 페이지로 이동
+	}
+	
+	@GetMapping("/clear") // 장바구니 비우기
+	public String clear(HttpSession session, Model model, HttpServletRequest httpServletRequest) {
+		
+		session.removeAttribute("cart"); //세션에서 삭제
+		
+		String refererLink = httpServletRequest.getHeader("Referer"); //요청된 이전주소의 정보가 들어있음
+		
+		return "redirect:" + refererLink; //다시 이전 페이지로 이동
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

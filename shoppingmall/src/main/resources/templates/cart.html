@@ -19,6 +19,8 @@
               <th>가격</th>
               <th>합계</th>
             </tr>
+            <!-- item은 해시맵 cart의 한개의  item이다. -->
+            <!-- 이때 key 값은 제품 id,  value 는 cart객체이므로 item.value.name 제품이름 -->
             <tr th:each="item : ${cart}">
               <td th:text="${item.value.name}"></td>
               <td>
@@ -51,5 +53,50 @@
     </main>
 
     <footer th:replace="/fragments/footer :: footer"></footer>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+
+    <script>
+      $(function () {
+        $('a.checkout').click(function (e) {
+          e.preventDefault(); //기본기능 정지
+          $.get('/cart/clear', {}, function () {}); //카트 클리어 요청(AJAX)
+          //$("form#paypalform").submit();
+          kakaoPay();
+          //location.reload(); //새로고침
+        });
+      });
+      function kakaoPay() {
+        var IMP = window.IMP; // 생략 가능
+        IMP.init('imp52560867'); // 예: imp00000000
+        IMP.request_pay(
+          {
+            pg: 'kakaopay',
+            //pay_method : 'card', //생략 가능
+            merchant_uid: 'order_no_0015', // 상점에서 관리하는 주문 번호(중복안되어야 됨)
+            name: '주문명:결제테스트',
+            amount: [[${ctotal}]],
+            buyer_email: 'iamport@siot.do',
+            buyer_name: '구매자이름',
+            buyer_tel: '010-1234-5678',
+            buyer_addr: '서울특별시 강남구 삼성동',
+            buyer_postcode: '123-456',
+          },
+          function (rsp) {
+            if (rsp.success) {
+              let msg = '결제가 완료되었습니다.';
+              msg += '고유ID : ' + rsp.imp_uid;
+              msg += '상점 거래ID : ' + rsp.merchant_uid;
+              msg += '결제 금액 : ' + rsp.paid_amount;
+              msg += '카드 승인번호 : ' + rsp.apply_num;
+              if (!alert(msg)) location.reload(); //메세지 확인 누르면 리로드
+            } else {
+              let msg = '결제에 실패하였습니다.';
+              msg += '에러내용 : ' + rsp.error_msg;
+              alert(msg);
+            }
+          }
+        );
+      }
+    </script>
   </body>
 </html>
