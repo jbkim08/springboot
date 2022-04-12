@@ -37,7 +37,7 @@ public class Common {
 		
 		// cpages에 모든 페이지들을 순서대로 담아서 전달
 		List<Page> cpages = pageRepo.findAllByOrderBySortingAsc();
-		List<Category> categories = categoryRepo.findAll(); 
+		List<Category> categories = categoryRepo.findAllByOrderBySortingAsc(); 
 		// 현재 장바구니 상태 (없을때 false)
 		boolean cartActive = false;
 		
