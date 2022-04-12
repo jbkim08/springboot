@@ -1,5 +1,6 @@
 package com.myapp.shoppingmall;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,7 +29,12 @@ public class Common {
 	
 	//모델에 추가한다.
 	@ModelAttribute
-	public void sharedData(Model model, HttpSession session) {
+	public void sharedData(Model model, HttpSession session, Principal principal) {
+		
+		if(principal != null) { //인증된 상태를 모든 페이지에 전달
+			model.addAttribute("principal", principal.getName()); //유저네임을 전달
+		}
+		
 		// cpages에 모든 페이지들을 순서대로 담아서 전달
 		List<Page> cpages = pageRepo.findAllByOrderBySortingAsc();
 		List<Category> categories = categoryRepo.findAll(); 

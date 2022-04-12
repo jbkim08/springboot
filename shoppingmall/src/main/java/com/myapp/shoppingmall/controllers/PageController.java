@@ -42,6 +42,12 @@ public class PageController {
 		
 		return "page";
 	}
+	
+	//로그인 페이지 보여주기
+	@GetMapping("/login")
+	public String login(Model model) {
+		return "login";
+	}
 }
 
 

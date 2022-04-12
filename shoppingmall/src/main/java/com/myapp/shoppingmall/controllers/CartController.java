@@ -80,7 +80,7 @@ public class CartController {
 			return "redirect:/"; //장바구니가 없을경우 홈페이지 이동
 		}
 		
-		HashMap<Integer, Cart> cart = (HashMap<Integer, Cart>) session.getAttribute("cart");
+		HashMap<Integer, Cart> cart = (HashMap<Integer, Cart>)session.getAttribute("cart");
 		 
 		model.addAttribute("cart", cart);
 		model.addAttribute("noCartView", true); //왼쪽 카트뷰 표시는 필요없음

@@ -60,9 +60,7 @@
         $('a.checkout').click(function (e) {
           e.preventDefault(); //기본기능 정지
           $.get('/cart/clear', {}, function () {}); //카트 클리어 요청(AJAX)
-          //$("form#paypalform").submit();
           kakaoPay();
-          //location.reload(); //새로고침
         });
       });
       function kakaoPay() {

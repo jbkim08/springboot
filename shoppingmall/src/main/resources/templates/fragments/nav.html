@@ -10,6 +10,20 @@
         <a class="nav-link" th:if="${page.slug!='home'}" th:href="@{'/'+${page.slug}}" th:text="${page.title}"></a>
       </li>
     </ul>
+    <!-- 로그인 정보가 없으면 가입하기/로그인 표시 -->
+    <ul class="navbar-nav" th:if="${principal == null}">
+      <li class="nav-item active">
+        <a class="nav-link" th:href="@{'/register'}" th:text="가입하기"></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" th:href="@{'/login'}" th:text="로그인"></a>
+      </li>
+    </ul>
+    <!-- 로그인 정보가 있으면 로그아웃(시큐리티) 표시   -->
+    <form th:if="${ principal != null}" th:action="@{/logout}" method="post">
+      <span class="text-white" th:text="${'💦하이, ' + principal}"></span>
+      <button class="btn btn-secondary ml-2">로그아웃</button>
+    </form>
   </div>
 </nav>
 
@@ -31,5 +45,10 @@
         <a class="nav-link" th:href="@{/admin/products}">Products</a>
       </li>
     </ul>
+    <!-- 로그인 정보가 있으면 로그아웃(시큐리티) 표시   -->
+    <form th:if="${ principal != null}" th:action="@{/logout}" method="post">
+      <span class="text-white" th:text="${'🔰관리자, ' + principal}"></span>
+      <button class="btn btn-secondary ml-2">로그아웃</button>
+    </form>
   </div>
 </nav>
