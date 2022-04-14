@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myapp.mybatis.mapper.ProductMapper">
+
+	<select id="selectProductById" resultType="Product">
+		SELECT prod_id
+			  ,prod_name
+			  ,prod_price
+		FROM products
+		WHERE prod_id = #{prodId}
+	</select>
+
+	<select id="selectAllProducts" resultType="Product">
+		SELECT prod_id
+			  ,prod_name
+			  ,prod_price
+		FROM products
+	</select>
+	
+	<insert id="insertProduct" parameterType="Product">
+        INSERT INTO products (prod_name, prod_price)
+        VALUES (#{prodName}, #{prodPrice})
+    </insert>
+	
+	<update id="updateProduct" parameterType="Product">
+        UPDATE products SET prod_name = #{prodName},
+        					prod_price = #{prodPrice}
+        WHERE prod_id = #{prodId}
+    </update>
+	
+	<delete id="deleteProductById">
+		DELETE FROM products WHERE prod_id = #{prodId}
+	</delete>
+
+</mapper>
