@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="fragments/head :: 헤드"></head>
+  <body class="g-sidenav-show bg-gray-200">
+    <aside th:replace="fragments/aside :: 어사이드"></aside>
+    <!-- 메인 컨텐트 시작 -->
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+      <!-- 상단 네브바 -->
+      <nav th:replace="fragments/nav :: 네브"></nav>
+      <!-- 컨텐츠 시작 -->
+      <div class="container-fluid py-4">
+        <!-- 빈 컨텐츠 (여기서 시작)-->
+      </div>
+    </main>
+
+    <!-- 오른쪽 숨김창 , JS 링크들 -->
+    <hidden th:replace="fragments/hidden :: 숨김창"></hidden>
+    <jslink th:replace="fragments/jslink :: 링크"></jslink>
+  </body>
+</html>

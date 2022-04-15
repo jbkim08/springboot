@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 자바소스의 BoardMapper의 경로 적용 -->
+<mapper namespace="com.myapp.bbs.dao.BoardMapper">
+
+	<select id="enroll" resultType="BoardVO">
+		insert into board(title, content, writer) 
+		values (#{title}, #{content}, #{writer})
+	</select>
+
+</mapper>
