@@ -10,7 +10,48 @@
       <!-- 컨텐츠 시작 -->
       <div class="container-fluid py-4">
         <!-- 빈 컨텐츠 (여기서 시작)-->
-        <h1>리스트 페이지</h1>
+        <a th:href="@{/board/enroll}" class="btn btn-primary my-3">게시판 등록</a>
+
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-center text-secondary text-xxs font-weight-bolder opacity-7">NO</th>
+                  <th class="text-center text-secondary text-xxs font-weight-bolder opacity-7">TITLE</th>
+                  <th class="text-center text-secondary text-xxs font-weight-bolder opacity-7">AUTHOR</th>
+                  <th class="text-center text-secondary text-xxs font-weight-bolder opacity-7">등록일</th>
+                  <th class="text-center text-secondary text-xxs font-weight-bolder opacity-7">수정일</th>
+                  <th class="text-center text-secondary text-xxs font-weight-bolder opacity-7">기타</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="board : ${boardList}">
+                  <td class="align-middle text-center">
+                    <span class="text-secondary text-sx" th:text="${board.bno}"></span>
+                  </td>
+                  <td class="align-middle text-center">
+                    <a th:href="@{/board/get(bno=${board.bno})}">
+                      <span class="text-secondary text-sx" th:text="${board.title}"></span>
+                    </a>
+                  </td>
+                  <td class="align-middle text-center">
+                    <span class="text-secondary text-sx" th:text="${board.writer}"></span>
+                  </td>
+                  <td class="align-middle text-center">
+                    <span class="text-secondary text-sx" th:text="${#temporals.format(board.regdate , 'yyyy-MM-dd a hh:mm:ss')}"></span>
+                  </td>
+                  <td class="align-middle text-center">
+                    <span class="text-secondary text-sx" th:text="${#temporals.format(board.updateDate , 'yyyy-MM-dd a hh:mm:ss')}"></span>
+                  </td>
+                  <td class="align-middle text-center">
+                    <span class="text-secondary text-sx"></span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </main>
 

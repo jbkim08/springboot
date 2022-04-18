@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="fragments/head :: 헤드"></head>
+  <body class="g-sidenav-show bg-gray-200">
+    <aside th:replace="fragments/aside :: 어사이드"></aside>
+    <!-- 메인 컨텐트 시작 -->
+    <main class="main-content mt-0">
+      <section>
+        <div class="page-header min-vh-100">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-10 ms-auto me-auto">
+                <div class="card card-plain">
+                  <div class="card-body bg-white">
+                    <table class="table table-condensed">
+                      <tr>
+                        <th>번호</th>
+                        <td th:text="${board.bno}"></td>
+                        <th>작성일</th>
+                        <td th:text="${#temporals.format(board.regdate, 'yyyy-MM-dd a hh:mm:ss')}"></td>
+                      </tr>
+                      <tr>
+                        <th>작성자</th>
+                        <td th:text="${board.writer}"></td>
+                        <th>수정일</th>
+                        <td th:text="${#temporals.format(board.updateDate, 'yyyy-MM-dd a hh:mm:ss')}"></td>
+                      </tr>
+                      <tr>
+                        <th>제목</th>
+                        <td colspan="3" th:text="${board.title}"></td>
+                      </tr>
+                      <tr>
+                        <th>내용</th>
+                        <td colspan="3" th:text="${board.content}"></td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="card-footer bg-white text-center pt-0 px-lg-2 px-1">
+                    <a th:href="@{/board/list}" class="btn btn-success">목록</a>
+                    <a th:href="@{/board/modify(bno=${board.bno})}" class="btn btn-secondary">수정</a>
+                    <button onclick="deleteConfirm();" class="btn btn-danger">삭제</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 오른쪽 숨김창 , JS 링크들 -->
+    <hidden th:replace="fragments/hidden :: 숨김창"></hidden>
+    <jslink th:replace="fragments/jslink :: 링크"></jslink>
+    <script>
+      function deleteConfirm() {
+        if (confirm('정말로 삭제할까요?')) {
+          location.href = '/board/delete?bno=' + '[[${board.bno}]]';
+        }
+      }
+    </script>
+  </body>
+</html>

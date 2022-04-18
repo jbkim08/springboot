@@ -1,5 +1,7 @@
 package com.myapp.bbs.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.myapp.bbs.dao.BoardMapper;
@@ -17,6 +19,26 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void enroll(BoardVO board) {
 		boardMapper.enroll(board);	
+	}
+
+	@Override
+	public List<BoardVO> getList() {		
+		return boardMapper.getList();
+	}
+
+	@Override
+	public BoardVO getPage(int bno) {
+		return boardMapper.getPage(bno);
+	}
+
+	@Override
+	public int modify(BoardVO board) {
+		return boardMapper.modify(board);
+	}
+
+	@Override
+	public int delete(int bno) {
+		return boardMapper.delete(bno);
 	}
 
 }

@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.myapp.bbs.model.BoardVO;
@@ -22,12 +23,6 @@ public class BoardController {
 	public BoardController(BoardService boardService) {
 		this.boardService = boardService;
 	}
-
-	@GetMapping("/list")
-	public String boardListGet() {
-		log.info("게시판 리스트 페이지 진입");
-		return "list";
-	}
 	
 	@GetMapping("/enroll")
 	public String boardEnrollGet(Model model) {
@@ -42,6 +37,48 @@ public class BoardController {
 		attr.addFlashAttribute("message", "게시물 등록 성공!");
 		return "redirect:/board/list"; //포스트 다음에 리다이렉트
 	}
+	
+	@GetMapping("/list")
+	public String boardListGET(Model model) {
+		//boardList에 모든 게시글을 전달
+		model.addAttribute("boardList", boardService.getList());
+		return "list";
+	}
+	
+	/**
+	 * 게시판 글을 조회하기
+	 * @param bno
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/get")
+	public String boardPageGET(@RequestParam("bno") int bno, Model model) {
+		model.addAttribute("board", boardService.getPage(bno));
+		return "get";
+	}
+	
+	@GetMapping("/modify")
+	public String boardModifyGET(@RequestParam("bno") int bno, Model model) {
+		model.addAttribute("board", boardService.getPage(bno));
+		return "modify";
+	}
+	
+	@PostMapping("/modify")
+	public String boardModifyPOST(BoardVO board, RedirectAttributes attr) {
+		log.info("" + board);
+		boardService.modify(board); //modify페이지에서 수정된 내용을 업데이트 함
+		attr.addFlashAttribute("message", "수정 성공!");
+		return "redirect:/board/list"; //post - redirect - get
+	}
+	
+	@GetMapping("/delete")
+	public String boardDeleteGET(@RequestParam("bno") int bno, RedirectAttributes attr) {
+		boardService.delete(bno); 
+		attr.addFlashAttribute("message", "삭제 성공!");
+		return "redirect:/board/list";
+	}
+	
+	
 }
 
 
