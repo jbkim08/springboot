@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.myapp.bbs.dao.BoardMapper;
 import com.myapp.bbs.model.BoardVO;
+import com.myapp.bbs.model.Criteria;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -39,6 +40,16 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public int delete(int bno) {
 		return boardMapper.delete(bno);
+	}
+
+	@Override
+	public List<BoardVO> getListPaging(Criteria cri) {
+		return boardMapper.getListPaging(cri);
+	}
+
+	@Override
+	public int getTotal() {
+		return boardMapper.getTotal();
 	}
 
 }

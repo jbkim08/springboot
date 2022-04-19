@@ -50,6 +50,30 @@
                 </tr>
               </tbody>
             </table>
+            <!-- 테이블 끝 -->
+            <!-- 페이지네이션 시작 -->
+            <nav aria-label="Page navigation" th:if="${pmk.endPage > 0}">
+              <ul class="pagination">
+                <li class="page-item">
+                  <a class="page-link" href="javascript:;" aria-label="이전">
+                    <span class="material-icons"> keyboard_arrow_left </span>
+                    <span class="sr-only">이전화살표</span>
+                  </a>
+                </li>
+
+                <li class="page-item" th:each="number : ${#numbers.sequence(1, pmk.endPage)}">
+                  <a class="page-link" href="javascript:;" th:text="${number}"></a>
+                </li>
+
+                <li class="page-item">
+                  <a class="page-link" href="javascript:;" aria-label="다음">
+                    <span class="material-icons"> keyboard_arrow_right </span>
+                    <span class="sr-only">다음화살표</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+            <!-- 페이지네이션 끝 -->
           </div>
         </div>
       </div>

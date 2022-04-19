@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.myapp.bbs.model.BoardVO;
+import com.myapp.bbs.model.Criteria;
+import com.myapp.bbs.model.PageMakerDTO;
 import com.myapp.bbs.service.BoardService;
 
 import lombok.extern.java.Log;
@@ -38,10 +40,24 @@ public class BoardController {
 		return "redirect:/board/list"; //포스트 다음에 리다이렉트
 	}
 	
+//	@GetMapping("/list")
+//	public String boardListGET(Model model) {
+//		//boardList에 모든 게시글을 전달
+//		model.addAttribute("boardList", boardService.getList());
+//		return "list";
+//	}
+	
+	/* 게시판 목록 페이지(페이징 적용) */
 	@GetMapping("/list")
-	public String boardListGET(Model model) {
-		//boardList에 모든 게시글을 전달
-		model.addAttribute("boardList", boardService.getList());
+	public String boardListGET(Criteria cri, Model model) {
+		//boardList에 페이징된 게시글을 전달
+		model.addAttribute("boardList", boardService.getListPaging(cri));
+		
+		int total = boardService.getTotal();
+		PageMakerDTO pmk = new PageMakerDTO(total, cri); //객체 생성시 모든 변수 계산됨
+		
+		model.addAttribute("pmk", pmk); //페이지네이션을 위한 pmk객체 전달
+		
 		return "list";
 	}
 	
@@ -77,6 +93,8 @@ public class BoardController {
 		attr.addFlashAttribute("message", "삭제 성공!");
 		return "redirect:/board/list";
 	}
+	
+	
 	
 	
 }

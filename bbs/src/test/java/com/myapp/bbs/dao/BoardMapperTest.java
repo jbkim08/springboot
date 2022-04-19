@@ -2,6 +2,7 @@ package com.myapp.bbs.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.test.annotation.Rollback;
 
 import com.myapp.bbs.model.BoardVO;
+import com.myapp.bbs.model.Criteria;
 
 import lombok.extern.java.Log;
 
@@ -59,8 +61,24 @@ public class BoardMapperTest {
 //		log.info("결과: "+result);
 		
 		/* 게시판 삭제 */
-		int result = boardMapper.delete(9);
+//		int result = boardMapper.delete(9);
+//		log.info("결과 : " +result);
+		
+		/* 페이징 리스트 */
+//		Criteria cri = new Criteria(); //기본 생성자 생성 (1,10)(pageNum, amount)
+//		
+//		cri.setPageNum(2);
+//		cri.setAmount(5);
+//		
+//		List<BoardVO> list = boardMapper.getListPaging(cri);
+//		
+//		list.forEach(board -> log.info(""+board));
+		
+		/* 총 개시물 숫자 */
+		
+		int result = boardMapper.getTotal();
 		log.info("결과 : " +result);
+		
 		
 	}
 }
