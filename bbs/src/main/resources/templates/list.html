@@ -31,7 +31,7 @@
                     <span class="text-secondary text-sx" th:text="${board.bno}"></span>
                   </td>
                   <td class="align-middle text-center">
-                    <a th:href="@{/board/get(bno=${board.bno})}">
+                    <a class="title" th:href="@{/board/get(bno=${board.bno})}">
                       <span class="text-secondary text-sx" th:text="${board.title}"></span>
                     </a>
                   </td>
@@ -51,22 +51,30 @@
               </tbody>
             </table>
             <!-- 테이블 끝 -->
+            <!-- 검색창 -->
+            <div class="d-flex justify-content-center mt-2">
+              <div class="w-md-25 w-sm-50 input-group input-group-outline is-filled">
+                <label class="form-label">search here...</label>
+                <input type="text" id="searchKeyword" th:value="${pmk.cri.keyword}" class="form-control" />
+                <button id="searchButton" class="btn btn-primary mb-0">검색</button>
+              </div>
+            </div>
             <!-- 페이지네이션 시작 -->
             <nav aria-label="Page navigation" th:if="${pmk.endPage > 0}">
-              <ul class="pagination">
-                <li class="page-item">
-                  <a class="page-link" href="javascript:;" aria-label="이전">
+              <ul class="pagination pagination-primary justify-content-center mt-5">
+                <li class="page-item" th:if="${pmk.prev}">
+                  <a class="page-link" th:href="@{/board/list} + '?pageNum=__${pmk.startPage-1}__'" aria-label="이전">
                     <span class="material-icons"> keyboard_arrow_left </span>
                     <span class="sr-only">이전화살표</span>
                   </a>
                 </li>
 
-                <li class="page-item" th:each="number : ${#numbers.sequence(1, pmk.endPage)}">
-                  <a class="page-link" href="javascript:;" th:text="${number}"></a>
+                <li class="page-item" th:classappend="${pmk.cri.pageNum == number} ? 'active': '' " th:each="number : ${#numbers.sequence(pmk.startPage, pmk.endPage)}">
+                  <a class="page-link" th:href="@{/board/list} + '?pageNum=__${number}__'" th:text="${number}"></a>
                 </li>
 
-                <li class="page-item">
-                  <a class="page-link" href="javascript:;" aria-label="다음">
+                <li class="page-item" th:if="${pmk.next}">
+                  <a class="page-link" th:href="@{/board/list} + '?pageNum=__${pmk.endPage+1}__'" aria-label="다음">
                     <span class="material-icons"> keyboard_arrow_right </span>
                     <span class="sr-only">다음화살표</span>
                   </a>
@@ -84,6 +92,44 @@
     <jslink th:replace="fragments/jslink :: 링크"></jslink>
     <script>
       document.getElementById('pageName').textContent = '게시판 목록';
+
+      const searchKeyword = document.getElementById('searchKeyword'); //키워드 입력창의 값(내용)
+      const searchButton = document.getElementById('searchButton'); //검색 버튼
+
+      /* 검색버튼을 눌럿을때(이벤트 'click') 키워드를 url에 추가해서 보내면 됨 */
+      searchButton.addEventListener('click', function () {
+        let keyword = ''; //키워드 변수 선언
+        let 공백제거키워드 = searchKeyword.value.trim();
+        if (공백제거키워드) keyword = '&keyword=' + 공백제거키워드; //키워드가 있을경우에 '&keyword=키워드'
+        location.href = '/board/list?pageNum=1' + keyword; // 처음 키워드로 검색시 무조건 1페이지를 보여준다.
+      });
+
+      /* 페이지네이션의 a 태그들을 전부 자바스크립트 요청으로 바꾸기(키워드 추가) */
+      const pageLinks = document.querySelectorAll('ul.pagination .page-link');
+      pageLinks.forEach(function (link) {
+        // 각각의 a태그를 클릭했을때 => 함수실행
+        link.addEventListener('click', function (e) {
+          e.preventDefault(); //a태그의 이동 요청이 취소됨
+          let keyword = ''; //키워드 변수 선언
+          let 공백제거키워드 = searchKeyword.value.trim();
+          if (공백제거키워드) keyword = '&keyword=' + 공백제거키워드; //키워드가 있을경우에 '&keyword=키워드'
+          location.href = this.getAttribute('href') + keyword; // 클릭한 a태그의 주소에 + 키워드로 요청함
+        });
+      });
+
+      /* 제목 a 태그들을 선택해서 a태그 이동을 취소하고 키워드 추가해서 요청 */
+      const getLinks = document.querySelectorAll('table .title');
+      getLinks.forEach(function (link) {
+        // 각각의 a태그를 클릭했을때 => 함수실행
+        link.addEventListener('click', function (e) {
+          e.preventDefault(); //a태그의 이동 요청이 취소됨
+          let keyword = ''; //키워드 변수 선언
+          let 공백제거키워드 = searchKeyword.value.trim();
+          if (공백제거키워드) keyword = '&keyword=' + 공백제거키워드; //키워드가 있을경우에 '&keyword=키워드'
+          let pageNum = document.querySelector('.active a').textContent;
+          location.href = this.getAttribute('href') + keyword + '&pageNum=' + pageNum;
+        });
+      });
     </script>
   </body>
 </html>

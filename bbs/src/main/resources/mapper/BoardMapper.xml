@@ -26,7 +26,13 @@
     
         select * from (
                 select bno, title, writer, regdate, updatedate  
-                from board order by bno desc
+                from board 
+                
+                <if test="keyword != null">
+                	where title like concat('%',#{keyword},'%')                 
+                </if>
+                
+                order by bno desc
                 )  as T1
         limit #{skip}, #{amount}
     
@@ -59,6 +65,10 @@
     <select id="getTotal" resultType="int">
     
         select count(*) from board
+        
+        <if test="keyword != null">
+        	where title like concat('%',#{keyword},'%')                 
+        </if>              
     
     </select>
 	

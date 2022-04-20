@@ -36,8 +36,8 @@
                     </table>
                   </div>
                   <div class="card-footer bg-white text-center pt-0 px-lg-2 px-1">
-                    <a th:href="@{/board/list}" class="btn btn-success">목록</a>
-                    <a th:href="@{/board/modify(bno=${board.bno})}" class="btn btn-secondary">수정</a>
+                    <a th:href="@{/board/list} + '?pageNum=__${cri.pageNum}__'" class="btn btn-success page">목록</a>
+                    <a th:href="@{/board/modify(bno=${board.bno})} + '&pageNum=__${cri.pageNum}__'" class="btn btn-secondary page">수정</a>
                     <button onclick="deleteConfirm();" class="btn btn-danger">삭제</button>
                   </div>
                 </div>
@@ -57,6 +57,17 @@
           location.href = '/board/delete?bno=' + '[[${board.bno}]]';
         }
       }
+
+      /* a태그들에 키워드를 추가해서 자바스크립트로 요청한다. */
+      const links = document.querySelectorAll('a.page');
+      links.forEach(function (link) {
+        // 각각의 a태그를 클릭했을때 => 함수실행
+        link.addEventListener('click', function (e) {
+          e.preventDefault(); //a태그의 이동 요청이 취소됨
+          let keyword = '[[${cri.keyword}]]';
+          location.href = this.getAttribute('href') + '&keyword=' + keyword; // 클릭한 a태그의 주소에 + 키워드로 요청함
+        });
+      });
     </script>
   </body>
 </html>

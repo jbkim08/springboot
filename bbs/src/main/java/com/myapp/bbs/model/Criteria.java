@@ -16,6 +16,9 @@ public class Criteria {
 	/* 스킵 할 게시물 수( (pageNum-1) * amount ) */
 	private int skip;
 	
+	/* 💥 검색어 키워드 💥 */   
+	private String keyword;	
+	
 	/* 기본 생성자 -> 기봅 세팅 : pageNum = 1, amount = 10 */
 	public Criteria() {
 		this(1,10); //전체 생성자를 통해 (1,10)을 입력해 객체 생성
@@ -54,6 +57,14 @@ public class Criteria {
 
 	public void setSkip(int skip) {
 		this.skip = skip;
+	}
+	
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}
 
 	@Override
