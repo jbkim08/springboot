@@ -6,6 +6,30 @@
 <!-- 자바소스의 BoardMapper의 경로 적용 -->
 <mapper namespace="com.myapp.bbs.dao.BoardMapper">
 
+    <!-- 검색 조건문 where절에 각각의 type이 있으면 추가해준다. -->
+    <sql id="criteria">
+        <trim prefix="where (" suffix=")" prefixOverrides="OR">
+            <foreach collection="typeArr" item="type">
+                <trim prefix="OR">
+                    <choose>
+                        <when test="type == 'T'.toString()">
+                            title like concat('%',#{keyword},'%') 
+                        </when>
+                        <when test="type == 'C'.toString()">
+                            content like concat('%',#{keyword},'%') 
+                        </when>
+                        <when test="type == 'W'.toString()">
+                            writer like concat('%',#{keyword},'%' )
+                        </when>
+                    </choose>
+                </trim>
+            </foreach>
+        </trim>  
+    </sql>
+
+
+
+
 	<!-- 게시판 등록 -->
 	<select id="enroll" resultType="BoardVO">
 	
@@ -29,7 +53,7 @@
                 from board 
                 
                 <if test="keyword != null">
-                	where title like concat('%',#{keyword},'%')                 
+                	<include refid="criteria"></include>              
                 </if>
                 
                 order by bno desc
@@ -37,6 +61,17 @@
         limit #{skip}, #{amount}
     
     </select>	
+    
+    <!-- 게시물 총 개숫 -->
+    <select id="getTotal" resultType="int">
+    
+        select count(*) from board
+        
+        <if test="keyword != null">
+        	<include refid="criteria"></include>                
+        </if>              
+    
+    </select>
 	
 	
 	<!-- 게시판 조회 -->
@@ -61,16 +96,7 @@
     
     </delete>
     
-    <!-- 게시물 총 개숫 -->
-    <select id="getTotal" resultType="int">
-    
-        select count(*) from board
-        
-        <if test="keyword != null">
-        	where title like concat('%',#{keyword},'%')                 
-        </if>              
-    
-    </select>
+
 	
 	
 </mapper>

@@ -31,7 +31,7 @@
                     <span class="text-secondary text-sx" th:text="${board.bno}"></span>
                   </td>
                   <td class="align-middle text-center">
-                    <a class="title" th:href="@{/board/get(bno=${board.bno})}">
+                    <a class="title" th:href="@{/board/get(bno=${board.bno})} + '&pageNum=__${pmk.cri.pageNum}__'">
                       <span class="text-secondary text-sx" th:text="${board.title}"></span>
                     </a>
                   </td>
@@ -53,6 +53,18 @@
             <!-- 테이블 끝 -->
             <!-- 검색창 -->
             <div class="d-flex justify-content-center mt-2">
+              <div class="input-group input-group-static me-3" style="width: 8em">
+                <label for="searchType" class="ms-0">검색방법</label>
+                <select class="form-control" id="searchType">
+                  <!-- <option value="" th:selected="${pmk.cri.type} == ''"></option> -->
+                  <option value="T" th:selected="${pmk.cri.type} == 'T'">제목</option>
+                  <option value="C" th:selected="${pmk.cri.type} == 'C'">내용</option>
+                  <option value="W" th:selected="${pmk.cri.type} == 'W'">작성자</option>
+                  <option value="TC" th:selected="${pmk.cri.type} == 'TC'">제목 + 내용</option>
+                  <option value="TW" th:selected="${pmk.cri.type} == 'TW'">제목 + 작성자</option>
+                  <option value="TCW" th:selected="${pmk.cri.type} == 'TCW'">제목 + 내용 + 작성자</option>
+                </select>
+              </div>
               <div class="w-md-25 w-sm-50 input-group input-group-outline is-filled">
                 <label class="form-label">search here...</label>
                 <input type="text" id="searchKeyword" th:value="${pmk.cri.keyword}" class="form-control" />
@@ -95,41 +107,47 @@
 
       const searchKeyword = document.getElementById('searchKeyword'); //키워드 입력창의 값(내용)
       const searchButton = document.getElementById('searchButton'); //검색 버튼
+      const searchType = document.getElementById('searchType'); //검색방법
 
       /* 검색버튼을 눌럿을때(이벤트 'click') 키워드를 url에 추가해서 보내면 됨 */
       searchButton.addEventListener('click', function () {
         let keyword = ''; //키워드 변수 선언
+        let type = '';
         let 공백제거키워드 = searchKeyword.value.trim();
-        if (공백제거키워드) keyword = '&keyword=' + 공백제거키워드; //키워드가 있을경우에 '&keyword=키워드'
-        location.href = '/board/list?pageNum=1' + keyword; // 처음 키워드로 검색시 무조건 1페이지를 보여준다.
+        if (공백제거키워드) {
+          //키워드가 있을경우에
+          keyword = '&keyword=' + 공백제거키워드;
+          type = '&type=' + searchType.value;
+        }
+        location.href = '/board/list?pageNum=1' + keyword + type; // 처음 키워드로 검색시 무조건 1페이지를 보여준다.
       });
 
       /* 페이지네이션의 a 태그들을 전부 자바스크립트 요청으로 바꾸기(키워드 추가) */
       const pageLinks = document.querySelectorAll('ul.pagination .page-link');
       pageLinks.forEach(function (link) {
         // 각각의 a태그를 클릭했을때 => 함수실행
-        link.addEventListener('click', function (e) {
-          e.preventDefault(); //a태그의 이동 요청이 취소됨
-          let keyword = ''; //키워드 변수 선언
-          let 공백제거키워드 = searchKeyword.value.trim();
-          if (공백제거키워드) keyword = '&keyword=' + 공백제거키워드; //키워드가 있을경우에 '&keyword=키워드'
-          location.href = this.getAttribute('href') + keyword; // 클릭한 a태그의 주소에 + 키워드로 요청함
-        });
+        link.addEventListener('click', pageControl);
       });
 
       /* 제목 a 태그들을 선택해서 a태그 이동을 취소하고 키워드 추가해서 요청 */
       const getLinks = document.querySelectorAll('table .title');
       getLinks.forEach(function (link) {
         // 각각의 a태그를 클릭했을때 => 함수실행
-        link.addEventListener('click', function (e) {
-          e.preventDefault(); //a태그의 이동 요청이 취소됨
-          let keyword = ''; //키워드 변수 선언
-          let 공백제거키워드 = searchKeyword.value.trim();
-          if (공백제거키워드) keyword = '&keyword=' + 공백제거키워드; //키워드가 있을경우에 '&keyword=키워드'
-          let pageNum = document.querySelector('.active a').textContent;
-          location.href = this.getAttribute('href') + keyword + '&pageNum=' + pageNum;
-        });
+        link.addEventListener('click', pageControl);
       });
+
+      function pageControl(e) {
+        e.preventDefault(); //a태그의 이동 요청이 취소됨
+        let keyword = ''; //키워드 변수 선언
+        let type = ''; //검색 방법
+        let 공백제거키워드 = searchKeyword.value.trim();
+        if (공백제거키워드) {
+          //키워드가 있을경우에
+          keyword = '&keyword=' + 공백제거키워드;
+          type = '&type=' + searchType.value;
+        }
+        location.href = this.getAttribute('href') + keyword + type; // 클릭한 a태그의 주소에 + 키워드로 요청함
+      }
     </script>
   </body>
 </html>

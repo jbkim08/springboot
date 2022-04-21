@@ -76,8 +76,8 @@ public class BoardMapperTest {
 		
 		/* 총 개시물 숫자 */
 		
-		int result = boardMapper.getTotal();
-		log.info("결과 : " +result);
+		//int result = boardMapper.getTotal();
+		//log.info("결과 : " +result);
 		
 		
 	}

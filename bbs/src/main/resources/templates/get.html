@@ -65,7 +65,12 @@
         link.addEventListener('click', function (e) {
           e.preventDefault(); //a태그의 이동 요청이 취소됨
           let keyword = '[[${cri.keyword}]]';
-          location.href = this.getAttribute('href') + '&keyword=' + keyword; // 클릭한 a태그의 주소에 + 키워드로 요청함
+          let type = '[[${cri.type}]]';
+          if (keyword.trim()) {
+            keyword = '&keyword=' + keyword;
+            type = '&type=' + type;
+          }
+          location.href = this.getAttribute('href') + keyword + type; // 클릭한 a태그의 주소에 + 키워드로 요청함
         });
       });
     </script>

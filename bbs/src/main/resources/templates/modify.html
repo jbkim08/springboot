@@ -33,7 +33,8 @@
                         <input type="text" class="form-control" th:field="*{writer}" readonly />
                       </div>
                       <div class="text-center">
-                        <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">수정하기</button>
+                        <a th:href="@{/board/list} + '?pageNum=__${cri.pageNum}__'" class="btn btn-danger page">수정취소</a>
+                        <button type="submit" class="btn btn-success">수정완료</button>
                       </div>
                     </form>
                   </div>
@@ -49,5 +50,20 @@
     <!-- 오른쪽 숨김창 , JS 링크들 -->
     <hidden th:replace="fragments/hidden :: 숨김창"></hidden>
     <jslink th:replace="fragments/jslink :: 링크"></jslink>
+    <script>
+      //수정 취소 클릭시
+      const link = document.querySelector('a.page');
+
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        let keyword = '[[${cri.keyword}]]'; //키워드가 있을경우 키워드 추가
+        let type = '[[${cri.type}]]';
+        if (keyword.trim()) {
+          keyword = '&keyword=' + keyword;
+          type = '&type=' + type;
+        }
+        location.href = this.getAttribute('href') + keyword + type;
+      });
+    </script>
   </body>
 </html>
