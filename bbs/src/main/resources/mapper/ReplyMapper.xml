@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 자바소스의 replyMapper의 경로 적용 -->
+<mapper namespace="com.myapp.bbs.dao.ReplyMapper">
+
+	<!-- 댓글 등록 -->
+	<select id="enroll" resultType="ReplyVO">
+	
+		insert into reply(reply_bno, content, writer) 
+		values (#{reply_bno}, #{content}, #{writer})
+		
+	</select>
+	
+	<!-- 댓글 목록(게시글번호)-->
+	<select id="getReplyList" resultType="ReplyVO">
+	
+		select * from reply where reply_bno = #{reply_bno}
+	
+	</select>
+	
+
+	<!-- 댓글 수정 -->
+    <update id="modify">
+    
+        update reply set content = #{content}, update_at = now() 
+        where reply_no = #{reply_no}
+        
+    </update>
+    
+    <!-- 댓글 삭제 -->
+    <delete id="delete">
+    
+        delete from reply where reply_no = #{reply_no}
+    
+    </delete>
+    
+</mapper>
