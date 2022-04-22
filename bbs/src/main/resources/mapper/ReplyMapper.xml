@@ -25,7 +25,7 @@
 	<!-- 댓글 수정 -->
     <update id="modify">
     
-        update reply set content = #{content}, update_at = now() 
+        update reply set content = #{content}, updated_at = now() 
         where reply_no = #{reply_no}
         
     </update>

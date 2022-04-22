@@ -39,12 +39,6 @@ public class ReplyVO {
 	@JsonFormat(pattern = "yyyy-MM-dd a hh:mm:ss") 
 	private LocalDateTime updated_at;
 
-	/* 생성자 : reply_no 와 날짜시간은 자동생성 */
-	public ReplyVO(int reply_bno, String content, String writer) {
-		this.reply_bno = reply_bno;
-		this.content = content;
-		this.writer = writer;
-	} 
 
 	/* 전체 생성자 */
 	public ReplyVO(int reply_no, int reply_bno, String content, String writer, LocalDateTime created_at,

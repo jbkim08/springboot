@@ -85,6 +85,7 @@
     <!-- 오른쪽 숨김창 , JS 링크들 -->
     <hidden th:replace="fragments/hidden :: 숨김창"></hidden>
     <jslink th:replace="fragments/jslink :: 링크"></jslink>
+    <script th:src="@{/js/Fetch-API.js}"></script>
     <script>
       function deleteConfirm() {
         if (confirm('정말로 삭제할까요?')) {
@@ -108,10 +109,91 @@
         });
       });
 
+      // Fetch api 라이브러리 객체
+      const http = new EasyHTTP();
+
       /* 댓글 버튼 클릭시 이벤트 */
       const replyButton = document.getElementById('reply-btn');
       replyButton.addEventListener('click', function () {
-        console.log('클릭했음');
+        //console.log('클릭했음');
+        const data = {
+          reply_bno: '[[${board.bno}]]',
+          content: document.getElementById('content').value,
+          writer: document.getElementById('writer').value,
+        };
+
+        http
+          .post('/reply', data)
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
+
+        location.reload(); //새로고침
+      });
+
+      function updateReply(el) {
+        //console.log(el);
+        const 댓글내용 = el.parentElement.previousElementSibling.previousElementSibling;
+        const 댓글수정 = el.parentElement.previousElementSibling; //수정할수있는 textarea창
+        const 삭제버튼 = el.nextElementSibling;
+        if (el.textContent === '수정') {
+          //버튼 이름이 수정이면
+          댓글내용.style.display = 'none';
+          댓글수정.style.display = 'block';
+          삭제버튼.style.visibility = 'hidden'; //완전히 삭제하지 않고 모습만 숨김
+          el.textContent = '수정 완료';
+        } else {
+          //수정이 되엇기 때문에 서버로 update 요청
+          const data = {
+            reply_no: el.dataset.id,
+            content: 댓글수정.value,
+          };
+
+          http
+            .put('/reply', data)
+            .then((res) => (댓글내용.textContent = res.content))
+            .catch((err) => console.log(err));
+
+          댓글내용.style.display = 'block';
+          댓글수정.style.display = 'none';
+          삭제버튼.style.visibility = 'visible';
+          el.textContent = '수정';
+        }
+      }
+
+      function replyListView(items) {
+        //댓글을 입력할 태그(ul)객체
+        const replyList = document.getElementById('reply-list');
+        let lis = ''; //댓글들 변수 선언
+        //console.log(items);
+        items.forEach(function (item) {
+          let writer = item.writer;
+          let content = item.content;
+          let updateTime = item.updated_at;
+          let id = item.reply_no;
+
+          let li = `<li class="list-group-item" style="position: relative">
+              <div>${writer}  ( ${updateTime} ) </div>
+              <p class="mb-0">${content}</p>
+              <textarea class="w-100" style="display:none">${content}</textarea>
+              <div style="position: absolute; top: 10px; right: 10px">
+                <button onclick="updateReply(this)" data-id="${id}" class="badge bg-gradient-info ms-auto">수정</button>
+                <button class="badge bg-gradient-danger">삭제</button>
+              </div>
+            </li>`;
+
+          lis += li; //각각의 댓글데이터가 들어간 li태그를 더해준다.
+        });
+        //댓글리스트에 실제 댓글들을 넣어준다.
+        replyList.innerHTML = lis;
+      }
+
+      //HTML 문서가 준비되면 실행하기 이벤트
+      document.addEventListener('DOMContentLoaded', function () {
+        //console.log('준비됨!');
+        http
+          .get('/reply/' + '[[${board.bno}]]')
+          .then((res) => replyListView(res))
+          .catch((err) => console.log(err));
       });
     </script>
   </body>
