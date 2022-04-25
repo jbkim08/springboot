@@ -130,6 +130,17 @@
         location.reload(); //새로고침
       });
 
+      function deleteReply(el) {
+        if (confirm('정말 삭제하겠습니까?')) {
+          http
+            .delete('/reply/' + el.dataset.id)
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err));
+          // 태그객체 삭제
+          el.parentElement.parentElement.remove();
+        }
+      }
+
       function updateReply(el) {
         //console.log(el);
         const 댓글내용 = el.parentElement.previousElementSibling.previousElementSibling;
@@ -177,7 +188,7 @@
               <textarea class="w-100" style="display:none">${content}</textarea>
               <div style="position: absolute; top: 10px; right: 10px">
                 <button onclick="updateReply(this)" data-id="${id}" class="badge bg-gradient-info ms-auto">수정</button>
-                <button class="badge bg-gradient-danger">삭제</button>
+                <button onclick="deleteReply(this)" data-id="${id}" class="badge bg-gradient-danger">삭제</button>
               </div>
             </li>`;
 

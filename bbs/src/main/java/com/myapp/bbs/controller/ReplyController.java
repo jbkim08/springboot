@@ -2,6 +2,7 @@ package com.myapp.bbs.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,9 +39,16 @@ public class ReplyController {
 	
 	@PutMapping
 	public ReplyVO replyUpdatePUT(@RequestBody ReplyVO reply) {
+		System.out.println(reply);
 		replyService.modify(reply); //DB에 댓글 데이터 수정하기
 		return reply;				//테스트로 reply 리턴
 	}
+	
+	@DeleteMapping("/{id}")
+	public void replyDELETE(@PathVariable("id") int reply_no) {
+		replyService.delete(reply_no);
+	}
+
 }
 
 
