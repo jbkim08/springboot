@@ -1,5 +1,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head th:replace="fragments/head :: 헤드"></head>
+  <style>
+    input:invalid:focus {
+      /* !important는 부트스트랩보다 우선순위를 높게 무조건 실행됨 */
+      background-image: linear-gradient(pink, lightgreen) !important;
+    }
+  </style>
   <body class="g-sidenav-show bg-gray-200">
     <aside th:replace="fragments/aside :: 어사이드"></aside>
     <!-- 메인 컨텐트 시작 -->
@@ -17,36 +23,36 @@
               <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
                 <div class="card card-plain">
                   <div class="card-header">
-                    <h4 class="font-weight-bolder">Sign Up</h4>
-                    <p class="mb-0">Enter your email and password to register</p>
+                    <h4 class="font-weight-bolder">가입하기</h4>
+                    <p class="mb-0" th:text="${message} ?: '가입양식을 작성해주세요'"></p>
                   </div>
                   <div class="card-body bg-white">
-                    <form role="form">
+                    <form role="form" th:action="@{/register}" method="post" th:object="${user}">
                       <div class="input-group input-group-outline mb-3">
                         <label class="form-label">Name</label>
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" th:field="*{name}" minlength="2" maxlength="5" required />
                       </div>
                       <div class="input-group input-group-outline mb-3">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control" />
+                        <input type="email" class="form-control" th:field="*{email}" required />
                       </div>
                       <div class="input-group input-group-outline mb-3">
                         <label class="form-label">Password</label>
-                        <input type="password" class="form-control" />
+                        <input type="password" class="form-control" th:field="*{password}" minlength="4" maxlength="10" required />
                       </div>
                       <div class="form-check form-check-info text-start ps-0">
                         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
                         <label class="form-check-label" for="flexCheckDefault"> I agree the <a href="javascript:;" class="text-dark font-weight-bolder">Terms and Conditions</a> </label>
                       </div>
                       <div class="text-center">
-                        <button type="button" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Sign Up</button>
+                        <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">가입하기</button>
                       </div>
                     </form>
                   </div>
                   <div class="card-footer bg-white text-center pt-0 px-lg-2 px-1">
                     <p class="mb-2 text-sm mx-auto">
-                      Already have an account?
-                      <a th:href="@{/pages/sign-in.html}" class="text-primary text-gradient font-weight-bold">Sign in</a>
+                      이미 계정이 있습니까?
+                      <a th:href="@{/login}" class="text-primary text-gradient font-weight-bold">로그인</a>
                     </p>
                   </div>
                 </div>
