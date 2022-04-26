@@ -16,11 +16,11 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-white" th:href="@{/tables}">
+        <a class="nav-link text-white" th:href="@{/board/list}">
           <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
             <i class="material-icons opacity-10">table_view</i>
           </div> 
-          <span class="nav-link-text ms-1">테이블</span>            
+          <span class="nav-link-text ms-1">게시판</span>            
         </a>
       </li>
       <li class="nav-item mt-3">
@@ -34,16 +34,24 @@
           <span class="nav-link-text ms-1">프로파일</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link text-white" th:href="@{/sign-in}">
+      <li class="nav-item" th:if="${userName != null}">
+        <a class="nav-link text-white" th:href="@{/logout}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">logout</i>
+          </div>
+          <span class="nav-link-text ms-1">로그아웃</span>
+        </a>
+      </li>
+      <li class="nav-item" th:if="${userName == null}">
+        <a class="nav-link text-white" th:href="@{/login}">
           <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
             <i class="material-icons opacity-10">login</i>
           </div>
           <span class="nav-link-text ms-1">로그인</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link text-white" th:href="@{/sign-up}">
+      <li class="nav-item" th:if="${userName == null}">
+        <a class="nav-link text-white" th:href="@{/register}">
           <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
             <i class="material-icons opacity-10">assignment</i>
           </div>

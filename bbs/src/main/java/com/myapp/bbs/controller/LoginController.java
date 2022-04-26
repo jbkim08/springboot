@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.myapp.bbs.model.Login;
 import com.myapp.bbs.model.User;
@@ -34,7 +35,7 @@ public class LoginController {
 	 */
 	@PostMapping("/login")
 	public String postLogin(Login login, Model model, HttpSession session) {
-		System.out.println(login.toString());
+
 		loginService.authenticate(login); //인증 메소드 실행(실패시 에러메세지 입력됨)
 		if (login.getError() != null) {
 			model.addAttribute("message", login.getError());
@@ -45,6 +46,14 @@ public class LoginController {
 			//System.out.println(user.toString()); //유저 출력
 			return "redirect:/board/list";
 		}
+	}
+	
+	@GetMapping("/logout")
+	public String getLogout(HttpSession session, RedirectAttributes attr) {
+		session.invalidate(); //모든 세션 삭제
+		//session.removeAttribute("user"); 유저만 삭제
+		attr.addFlashAttribute("message", "로그아웃 됨");
+		return "redirect:/login"; //로그인 페이지로
 	}
 
 
